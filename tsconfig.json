@@ -5,7 +5,6 @@
     "target": "ES2021",
     "esModuleInterop": true,
     "allowJs": true,
-    "strict": false,
-    "strictNullChecks": true
+    "strict": false
   }
 }
