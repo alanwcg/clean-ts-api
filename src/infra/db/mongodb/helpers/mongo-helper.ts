@@ -1,5 +1,9 @@
 import { MongoClient, Collection } from 'mongodb'
 
+export enum Collections {
+  ACCOUNTS = 'accounts'
+}
+
 export class MongoHelper {
   private static instance: MongoHelper
   private client: MongoClient
