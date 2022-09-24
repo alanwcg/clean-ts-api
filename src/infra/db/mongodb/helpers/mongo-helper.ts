@@ -1,4 +1,4 @@
-import { MongoClient, Collection } from 'mongodb'
+import { MongoClient, Collection, Document } from 'mongodb'
 
 export enum Collections {
   ACCOUNTS = 'accounts'
@@ -20,6 +20,11 @@ export class MongoHelper {
 
   getCollection (name: string): Collection {
     return this.client.db().collection(name)
+  }
+
+  mapper<T> (document: Document): T {
+    const { _id, ...rest } = document
+    return Object.assign({}, { id: _id.toString() }, rest) as T
   }
 
   static getInstance (): MongoHelper {
