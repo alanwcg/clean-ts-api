@@ -1,7 +1,8 @@
 import { MongoClient, Collection, Document } from 'mongodb'
 
 export enum Collections {
-  ACCOUNTS = 'accounts'
+  ACCOUNTS = 'accounts',
+  ERRORS = 'errors'
 }
 
 export class MongoHelper {
