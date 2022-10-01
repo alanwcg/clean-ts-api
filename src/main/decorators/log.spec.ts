@@ -94,11 +94,6 @@ describe('Log Controller Decorator', () => {
       new Promise(resolve => resolve(serverError(makeFakeError())))
     )
     const httpResponse = await sut.handle(makeFakeRequest())
-    expect(httpResponse).toEqual({
-      statusCode: httpResponse.statusCode,
-      body: {
-        error: httpResponse.body.error
-      }
-    })
+    expect(httpResponse).toEqual(serverError(makeFakeError()))
   })
 })
