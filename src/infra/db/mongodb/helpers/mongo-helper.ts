@@ -7,13 +7,13 @@ export enum Collections {
 export class MongoHelper {
   private static instance: MongoHelper
   private client: MongoClient
-  private url: string
+  private uri: string
 
   private constructor () {}
 
-  async connect (url: string): Promise<void> {
-    this.url = url
-    this.client = await MongoClient.connect(url)
+  async connect (uri: string): Promise<void> {
+    this.uri = uri
+    this.client = await MongoClient.connect(uri)
   }
 
   async disconnect (): Promise<void> {
@@ -23,7 +23,7 @@ export class MongoHelper {
 
   async getCollection (name: string): Promise<Collection> {
     if (!this.client) {
-      await this.connect(this.url)
+      await this.connect(this.uri)
     }
     return this.client.db().collection(name)
   }
