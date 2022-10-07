@@ -8,7 +8,7 @@ export class CompareFieldsValidator implements Validator {
   ) {}
 
   validate (input: Record<string, any>): Error {
-    if (this.fieldName !== this.fieldToCompareName) {
+    if (input[this.fieldName] !== input[this.fieldToCompareName]) {
       return new InvalidParamError(this.fieldToCompareName)
     }
   }

@@ -20,10 +20,9 @@ describe('SignUp Validator Factory', () => {
   it('should call ValidatorComposite with all validators', () => {
     makeSignUpValidator()
     const validators: Validator[] = []
-    const requiredFields = ['name', 'email', 'password', 'passwordConfirmation']
-    requiredFields.forEach(field => {
+    for (const field of ['name', 'email', 'password', 'passwordConfirmation']) {
       validators.push(new RequiredFieldValidator(field))
-    })
+    }
     validators.push(new CompareFieldsValidator('password', 'passwordConfirmation'))
     validators.push(new EmailValidation('email', makeEmailValidator()))
     expect(ValidatorComposite).toHaveBeenCalledWith(validators)
