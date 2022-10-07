@@ -1,5 +1,6 @@
 import {
   Controller,
+  Validator,
   EmailValidator,
   AddAccount,
   HttpRequest,
@@ -10,12 +11,14 @@ import { badRequest, serverError, success } from '../../helpers/http-helper'
 
 export class SignUpController implements Controller {
   constructor (
+    private readonly validator: Validator,
     private readonly emailValidator: EmailValidator,
     private readonly addAccount: AddAccount
   ) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
+      this.validator.validate(httpRequest.body)
       const requiredFields = [
         'name',
         'email',
