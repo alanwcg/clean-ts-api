@@ -2,7 +2,7 @@ import {
   HttpRequest,
   Validator,
   Authentication,
-  AuthParams
+  AuthenticationModel
 } from './login-protocols'
 import {
   badRequest,
@@ -31,7 +31,7 @@ const makeValidator = (): Validator => {
 
 const makeAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
-    async auth ({ email, password }: AuthParams): Promise<string> {
+    async auth ({ email, password }: AuthenticationModel): Promise<string> {
       return 'any_token'
     }
   }

@@ -3,8 +3,7 @@ import {
   Validator,
   Authentication,
   HttpRequest,
-  HttpResponse,
-  AuthParams
+  HttpResponse
 } from './login-protocols'
 import {
   badRequest,
@@ -25,9 +24,8 @@ export class LoginController implements Controller {
       if (error) {
         return badRequest(error)
       }
-      const accessToken = await this.authentication.auth(
-        httpRequest.body as AuthParams
-      )
+      const { email, password } = httpRequest.body
+      const accessToken = await this.authentication.auth({ email, password })
       if (!accessToken) {
         return unauthorized()
       }
