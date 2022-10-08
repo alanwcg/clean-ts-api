@@ -3,14 +3,16 @@ import {
   Authentication,
   LoadAccountByEmailRepository,
   HashComparer,
-  TokenGenerator
+  TokenGenerator,
+  UpdateAccessTokenRepository
 } from './db-authentication-protocols'
 
 export class DbAuthentication implements Authentication {
   constructor (
     private readonly loadAccountByEmailRepository: LoadAccountByEmailRepository,
     private readonly hashComparer: HashComparer,
-    private readonly tokenGenerator: TokenGenerator
+    private readonly tokenGenerator: TokenGenerator,
+    private readonly updateAccessTokenRepository: UpdateAccessTokenRepository
   ) {}
 
   async auth (authentication: AuthenticationModel): Promise<string> {
@@ -26,7 +28,9 @@ export class DbAuthentication implements Authentication {
     if (!isPasswordValid) {
       return null
     }
-    const accessToken = await this.tokenGenerator.generate(account.id)
+    const { id } = account
+    const accessToken = await this.tokenGenerator.generate(id)
+    await this.updateAccessTokenRepository.update({ id, accessToken })
     return accessToken
   }
 }
