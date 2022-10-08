@@ -31,6 +31,9 @@ describe('SignUp Routes', () => {
         password: '123456'
       })
       .expect(400)
+      .expect(res => expect(res.body).toEqual({
+        error: expect.any(String)
+      }))
   })
 
   it('should return 500 if unexpected error occurred', async () => {
@@ -46,6 +49,9 @@ describe('SignUp Routes', () => {
         passwordConfirmation: '123456'
       })
       .expect(500)
+      .expect(res => expect(res.body).toEqual({
+        error: expect.any(String)
+      }))
   })
 
   it('should return an account on success', async () => {
@@ -58,5 +64,11 @@ describe('SignUp Routes', () => {
         passwordConfirmation: '123456'
       })
       .expect(200)
+      .expect(res => expect(res.body).toEqual({
+        id: expect.any(String),
+        name: 'Alan Cintra',
+        email: 'alancintra7@gmail.com',
+        password: expect.any(String)
+      }))
   })
 })
