@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt'
+import { CompareParams } from '../../data/protocols/criptography/hash-comparer'
 import { BcryptAdapter } from './bcrypt-adapter'
 
 jest.mock('bcrypt', () => ({
@@ -9,6 +10,11 @@ jest.mock('bcrypt', () => ({
     return true
   }
 }))
+
+const makeFakeCompareParams = (): CompareParams => ({
+  value: 'any_value',
+  hash: 'any_hash'
+})
 
 const SALT = 12
 const makeSut = (): BcryptAdapter => {
@@ -23,7 +29,7 @@ describe('Bcrypt Adapter', () => {
     expect(hashSpy).toHaveBeenCalledWith('any_value', SALT)
   })
 
-  it('should throw if bcrypt throws', async () => {
+  it('should throw if hash throws', async () => {
     const sut = makeSut()
     jest.spyOn(bcrypt, 'hash').mockImplementationOnce(() => {
       throw new Error()
@@ -41,20 +47,29 @@ describe('Bcrypt Adapter', () => {
   it('should calls compare with correct values', async () => {
     const sut = makeSut()
     const compareSpy = jest.spyOn(bcrypt, 'compare')
-    await sut.compare({ value: 'any_value', hash: 'any_hash' })
+    await sut.compare(makeFakeCompareParams())
     expect(compareSpy).toHaveBeenCalledWith('any_value', 'any_hash')
   })
 
   it('should return true when compare succeeds', async () => {
     const sut = makeSut()
-    const isValid = await sut.compare({ value: 'any_value', hash: 'any_hash' })
+    const isValid = await sut.compare(makeFakeCompareParams())
     expect(isValid).toBe(true)
   })
 
   it('should return false when compare fails', async () => {
     const sut = makeSut()
     jest.spyOn(bcrypt, 'compare').mockImplementationOnce(() => false)
-    const isValid = await sut.compare({ value: 'any_value', hash: 'any_hash' })
+    const isValid = await sut.compare(makeFakeCompareParams())
     expect(isValid).toBe(false)
+  })
+
+  it('should throw if compare throws', async () => {
+    const sut = makeSut()
+    jest.spyOn(bcrypt, 'compare').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const promise = sut.compare(makeFakeCompareParams())
+    await expect(promise).rejects.toThrow()
   })
 })
