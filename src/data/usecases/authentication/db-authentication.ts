@@ -2,13 +2,15 @@ import { AuthenticationModel } from '../../../domain/usecases/authentication'
 import {
   Authentication,
   LoadAccountByEmailRepository,
-  HashComparer
+  HashComparer,
+  TokenGenerator
 } from './db-authentication-protocols'
 
 export class DbAuthentication implements Authentication {
   constructor (
     private readonly loadAccountByEmailRepository: LoadAccountByEmailRepository,
-    private readonly hashComparer: HashComparer
+    private readonly hashComparer: HashComparer,
+    private readonly tokenGenerator: TokenGenerator
   ) {}
 
   async auth (authentication: AuthenticationModel): Promise<string> {
@@ -24,6 +26,7 @@ export class DbAuthentication implements Authentication {
     if (!isPasswordValid) {
       return null
     }
+    await this.tokenGenerator.generate(account.id)
     return ''
   }
 }
