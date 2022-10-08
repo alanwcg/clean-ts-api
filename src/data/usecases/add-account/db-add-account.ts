@@ -1,6 +1,6 @@
 import {
   AddAccount,
-  Encrypter,
+  Hasher,
   AddAccountRepository,
   AddAccountModel,
   AccountModel
@@ -8,14 +8,14 @@ import {
 
 export class DbAddAccount implements AddAccount {
   constructor (
-    private readonly encrypter: Encrypter,
+    private readonly hasher: Hasher,
     private readonly addAccountRepository: AddAccountRepository
   ) {}
 
   async add (accountData: AddAccountModel): Promise<AccountModel> {
-    const encryptedPassword = await this.encrypter.encrypt(accountData.password)
+    const hashedPassword = await this.hasher.hash(accountData.password)
     const account = await this.addAccountRepository.add(
-      Object.assign({}, accountData, { password: encryptedPassword })
+      Object.assign({}, accountData, { password: hashedPassword })
     )
     return account
   }
