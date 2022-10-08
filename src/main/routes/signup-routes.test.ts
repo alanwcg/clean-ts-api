@@ -22,6 +22,17 @@ describe('SignUp Routes', () => {
     await accountCollection.deleteMany({})
   })
 
+  it('should return 400 if invalid body is provided', async () => {
+    await request(app)
+      .post('/api/signup')
+      .send({
+        name: 'Alan Cintra',
+        email: 'alancintra7@gmail.com',
+        password: '123456'
+      })
+      .expect(400)
+  })
+
   it('should return 500 if unexpected error occurred', async () => {
     jest.spyOn(DbAddAccount.prototype, 'add').mockImplementationOnce(() => {
       throw new Error()
