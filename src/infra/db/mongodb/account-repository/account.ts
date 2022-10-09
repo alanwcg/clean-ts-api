@@ -19,5 +19,6 @@ export class AccountMongoRepository implements AddAccountRepository, LoadAccount
     if (account) {
       return mongoHelper.mapper(account)
     }
+    return null
   }
 }
