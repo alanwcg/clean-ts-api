@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt'
-import { CompareParams } from '../../data/protocols/criptography/hash-comparer'
+import { CompareParams } from '../../../data/protocols/criptography/hash-comparer'
 import { BcryptAdapter } from './bcrypt-adapter'
 
 jest.mock('bcrypt', () => ({
