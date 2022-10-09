@@ -4,7 +4,7 @@ import {
   Authentication,
   HttpRequest,
   HttpResponse
-} from './login-protocols'
+} from './login-controller-protocols'
 import {
   badRequest,
   serverError,
