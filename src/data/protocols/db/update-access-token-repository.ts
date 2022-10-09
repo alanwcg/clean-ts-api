@@ -4,5 +4,5 @@ export type UpdateParams = {
 }
 
 export interface UpdateAccessTokenRepository {
-  update: (params: UpdateParams) => Promise<void>
+  updateAccessToken: (params: UpdateParams) => Promise<void>
 }
