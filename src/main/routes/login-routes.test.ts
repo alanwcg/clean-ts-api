@@ -104,6 +104,19 @@ describe('Login Routes', () => {
         }))
     })
 
+    it('should return 401 with invalid credentials', async () => {
+      await request(app)
+        .post('/api/login')
+        .send({
+          email: 'alancintra7@gmail.com',
+          password: '123456'
+        })
+        .expect(401)
+        .expect(res => expect(res.body).toEqual({
+          error: expect.any(String)
+        }))
+    })
+
     it('should return 500 if unexpected error occurred', async () => {
       jest.spyOn(DbAuthentication.prototype, 'auth').mockImplementationOnce(
         () => {
