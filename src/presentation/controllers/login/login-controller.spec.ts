@@ -22,7 +22,7 @@ const makeFakeRequest = (): HttpRequest => ({
 
 const makeValidator = (): Validator => {
   class ValidatorStub implements Validator {
-    validate (input: Record<string, any>): Error {
+    validate (input: Record<string, any>): Error | null {
       return null
     }
   }
@@ -81,7 +81,10 @@ describe('Login Controller', () => {
 
   it('should return 401 if invalid credentials are provided', async () => {
     const { sut, authenticationStub } = makeSut()
-    jest.spyOn(authenticationStub, 'auth').mockReturnValueOnce(null)
+    jest.spyOn(authenticationStub, 'auth')
+      .mockReturnValueOnce(
+        new Promise(resolve => resolve(null as unknown as string))
+      )
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(unauthorized())
   })

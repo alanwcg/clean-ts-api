@@ -4,7 +4,7 @@ describe('Mongo Helper', () => {
   const sut = MongoHelper.getInstance()
 
   beforeAll(async () => {
-    await sut.connect(process.env.MONGO_URL)
+    await sut.connect(String(process.env.MONGO_URL))
   })
 
   afterAll(async () => {

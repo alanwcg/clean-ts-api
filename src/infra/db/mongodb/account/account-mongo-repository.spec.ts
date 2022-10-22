@@ -17,7 +17,7 @@ describe('Account Mongo Repository', () => {
   const mongoHelper = MongoHelper.getInstance()
 
   beforeAll(async () => {
-    await mongoHelper.connect(process.env.MONGO_URL)
+    await mongoHelper.connect(String(process.env.MONGO_URL))
   })
 
   afterAll(async () => {
@@ -72,7 +72,7 @@ describe('Account Mongo Repository', () => {
       })
       const updatedAccount = await accountCollection.findOne({ _id: insertedId })
       expect(updatedAccount).toBeTruthy()
-      expect(updatedAccount.accessToken).toBe('any_token')
+      expect(updatedAccount?.accessToken).toBe('any_token')
     })
   })
 })

@@ -27,7 +27,7 @@ const makeFakeAccount = (): AccountModel => ({
 
 const makeValidator = (): Validator => {
   class ValidatorStub implements Validator {
-    validate (input: Record<string, any>): Error {
+    validate (input: Record<string, any>): Error | null {
       return null
     }
   }
