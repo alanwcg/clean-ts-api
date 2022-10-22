@@ -4,8 +4,13 @@ services:
     container_name: mongo
     image: mongo:5
     restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+      - MONGO_INITDB_DATABASE=clean-node-api
     volumes:
       - ./data:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
     ports:
       - "27017:27017"
   api:
@@ -14,12 +19,6 @@ services:
     image: clean-node-api
     restart: always
     command: npm run start
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=admin
-      - MONGO_INITDB_DATABASE=clean-node-api
-      - MONGO_NON_ROOT_USERNAME=mongo
-      - MONGO_NON_ROOT_PASSWORD=mongo
     volumes:
       - ./dist:/usr/src/clean-node-api/dist
     ports:
