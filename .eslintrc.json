@@ -7,13 +7,6 @@
     "@typescript-eslint/strict-boolean-expressions": "off",
     "@typescript-eslint/consistent-type-definitions": "off",
     "@typescript-eslint/return-await": "off",
-    "@typescript-eslint/no-misused-promises": [
-      "error",
-      {
-        "checksVoidReturn": {
-          "returns": false
-        }
-      }
-    ]
+    "@typescript-eslint/no-misused-promises": "off"
   }
 }
