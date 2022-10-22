@@ -5,7 +5,6 @@
   "author": "alanwcg <alancintra7@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "prepare": "husky install",
     "start": "node dist/main/server.js",
     "build": "rimraf dist && tsc",
     "dev": "sucrase-node src/main/server.ts",
