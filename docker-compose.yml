@@ -1,0 +1,28 @@
+version: "3"
+services:
+  mongo:
+    container_name: mongo
+    image: mongo:5
+    restart: always
+    volumes:
+      - ./data:/data/db
+    ports:
+      - "27017:27017"
+  api:
+    container_name: clean-node-api
+    build: .
+    image: clean-node-api
+    restart: always
+    command: npm run start
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+      - MONGO_INITDB_DATABASE=clean-node-api
+      - MONGO_NON_ROOT_USERNAME=mongo
+      - MONGO_NON_ROOT_PASSWORD=mongo
+    volumes:
+      - ./dist:/usr/src/clean-node-api/dist
+    ports:
+      - "5050:5050"
+    links:
+      - mongo
