@@ -31,8 +31,8 @@ const makeHasher = (): Hasher => {
 
 const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
   class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
-    async loadByEmail (email: string): Promise<AccountModel> {
-      return makeFakeAccount()
+    async loadByEmail (email: string): Promise<AccountModel | null> {
+      return null
     }
   }
   return new LoadAccountByEmailRepositoryStub()
@@ -41,7 +41,7 @@ const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
 const makeAddAccountRepository = (): AddAccountRepository => {
   class AddAccountRepositoryStub implements AddAccountRepository {
     async add (account: AddAccountModel): Promise<AccountModel> {
-      return new Promise(resolve => resolve(makeFakeAccount()))
+      return makeFakeAccount()
     }
   }
   return new AddAccountRepositoryStub()
@@ -126,5 +126,15 @@ describe('DbAddAccount use case', () => {
       })
     const promise = sut.add(makeFakeAccountData())
     await expect(promise).rejects.toThrow()
+  })
+
+  it('should return null if LoadAccountByEmailRepository returns an account', async () => {
+    const { sut, loadAccountByEmailRepositoryStub } = makeSut()
+    jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
+      .mockReturnValueOnce(
+        new Promise(resolve => resolve(makeFakeAccount()))
+      )
+    const account = await sut.add(makeFakeAccountData())
+    expect(account).toBe(null)
   })
 })
