@@ -82,10 +82,7 @@ describe('Login Routes', () => {
         .send(makeFakeSignUpRequestBody())
         .expect(200)
         .expect(res => expect(res.body).toEqual({
-          id: expect.any(String),
-          name: 'Alan Cintra',
-          email: 'alancintra7@gmail.com',
-          password: expect.any(String)
+          accessToken: expect.any(String)
         }))
     })
   })
