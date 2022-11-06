@@ -13,16 +13,33 @@ const makeFakeRequest = (): HttpRequest => ({
   }
 })
 
+const makeValidator = (): Validator => {
+  class ValidatorStub implements Validator {
+    validate (input: Record<string, any>): Error | null {
+      return null
+    }
+  }
+  return new ValidatorStub()
+}
+
+type SutTypes = {
+  sut: AddSurveyController
+  validatorStub: Validator
+}
+
+const makeSut = (): SutTypes => {
+  const validatorStub = makeValidator()
+  const sut = new AddSurveyController(validatorStub)
+  return {
+    sut,
+    validatorStub
+  }
+}
+
 describe('AddSurvey Controller', () => {
   it('should call Validator with correct values', async () => {
-    class ValidatorStub implements Validator {
-      validate (input: Record<string, any>): Error | null {
-        return null
-      }
-    }
-    const validatorStub = new ValidatorStub()
+    const { sut, validatorStub } = makeSut()
     const validateSpy = jest.spyOn(validatorStub, 'validate')
-    const sut = new AddSurveyController(validatorStub)
     const httpRequest = makeFakeRequest()
     await sut.handle(httpRequest)
     expect(validateSpy).toHaveBeenCalledWith(httpRequest.body)
