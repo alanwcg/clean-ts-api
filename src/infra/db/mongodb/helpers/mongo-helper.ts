@@ -2,6 +2,7 @@ import { MongoClient, Collection, Document } from 'mongodb'
 
 export enum Collections {
   ACCOUNTS = 'accounts',
+  SURVEYS = 'surveys',
   ERRORS = 'errors'
 }
 
