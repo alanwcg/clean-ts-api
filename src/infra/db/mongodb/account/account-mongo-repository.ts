@@ -43,7 +43,14 @@ export class AccountMongoRepository implements
     const accountCollection = await mongoHelper.getCollection(Collections.ACCOUNTS)
     const account = await accountCollection.findOne<AccountModel>({
       accessToken: token,
-      role
+      $or: [
+        {
+          role
+        },
+        {
+          role: 'admin'
+        }
+      ]
     })
     if (account) {
       return mongoHelper.mapper(account)
