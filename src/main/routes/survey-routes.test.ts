@@ -117,12 +117,11 @@ describe('Survey Routes', () => {
         .expect(500)
     })
 
-    // it('should return 204 with valid token', async () => {
-    //   await request(app)
-    //     .post('/api/surveys')
-    //     .set('x-access-token', accessToken)
-    //     .send(makeFakeSurveysRequestBody())
-    //     .expect(204)
-    // })
+    it('should return 204 on success', async () => {
+      await request(app)
+        .get('/api/surveys')
+        .set('x-access-token', accessToken)
+        .expect(204)
+    })
   })
 })
