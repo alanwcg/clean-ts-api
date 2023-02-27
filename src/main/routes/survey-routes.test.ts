@@ -4,6 +4,7 @@ import { sign } from 'jsonwebtoken'
 import app from '../config/app'
 import env from '../config/env'
 import { DbAddSurvey } from '../../data/usecases/add-survey/db-add-survey'
+import { DbLoadSurveys } from '../../data/usecases/load-surveys/db-load-surveys'
 import { AddSurveyModel } from '../../domain/usecases/add-survey'
 import {
   MongoHelper,
@@ -106,19 +107,15 @@ describe('Survey Routes', () => {
         .expect(403)
     })
 
-    // it('should return 500 if unexpected error occurred', async () => {
-    //   jest.spyOn(DbAddSurvey.prototype, 'add').mockImplementationOnce(() => {
-    //     throw new Error()
-    //   })
-    //   await request(app)
-    //     .post('/api/surveys')
-    //     .set('x-access-token', accessToken)
-    //     .send(makeFakeSurveysRequestBody())
-    //     .expect(500)
-    //     .expect(res => expect(res.body).toEqual({
-    //       error: expect.any(String)
-    //     }))
-    // })
+    it('should return 500 if unexpected error occurred', async () => {
+      jest.spyOn(DbLoadSurveys.prototype, 'load').mockImplementationOnce(() => {
+        throw new Error()
+      })
+      await request(app)
+        .get('/api/surveys')
+        .set('x-access-token', accessToken)
+        .expect(500)
+    })
 
     // it('should return 204 with valid token', async () => {
     //   await request(app)
