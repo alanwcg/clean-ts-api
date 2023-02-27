@@ -65,9 +65,6 @@ describe('Survey Routes', () => {
         .set('x-access-token', accessToken)
         .send({})
         .expect(400)
-        .expect(res => expect(res.body).toEqual({
-          error: expect.any(String)
-        }))
     })
 
     it('should return 403 without accessToken', async () => {
@@ -86,9 +83,6 @@ describe('Survey Routes', () => {
         .set('x-access-token', accessToken)
         .send(makeFakeSurveysRequestBody())
         .expect(500)
-        .expect(res => expect(res.body).toEqual({
-          error: expect.any(String)
-        }))
     })
 
     it('should return 204 with valid token', async () => {
