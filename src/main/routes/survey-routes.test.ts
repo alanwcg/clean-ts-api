@@ -98,4 +98,34 @@ describe('Survey Routes', () => {
         .expect(204)
     })
   })
+
+  describe('[GET] /surveys', () => {
+    it('should return 403 without accessToken', async () => {
+      await request(app)
+        .get('/api/surveys')
+        .expect(403)
+    })
+
+    // it('should return 500 if unexpected error occurred', async () => {
+    //   jest.spyOn(DbAddSurvey.prototype, 'add').mockImplementationOnce(() => {
+    //     throw new Error()
+    //   })
+    //   await request(app)
+    //     .post('/api/surveys')
+    //     .set('x-access-token', accessToken)
+    //     .send(makeFakeSurveysRequestBody())
+    //     .expect(500)
+    //     .expect(res => expect(res.body).toEqual({
+    //       error: expect.any(String)
+    //     }))
+    // })
+
+    // it('should return 204 with valid token', async () => {
+    //   await request(app)
+    //     .post('/api/surveys')
+    //     .set('x-access-token', accessToken)
+    //     .send(makeFakeSurveysRequestBody())
+    //     .expect(204)
+    // })
+  })
 })
