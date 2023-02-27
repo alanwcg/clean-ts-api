@@ -4,13 +4,17 @@ import {
   HttpResponse,
   LoadSurveys
 } from './load-surveys-controller-protocols'
-import { success } from '../../../helpers/http/http-helper'
+import { success, serverError } from '../../../helpers/http/http-helper'
 
 export class LoadSurveysController implements Controller {
   constructor (private readonly loadSurveys: LoadSurveys) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
-    const surveys = await this.loadSurveys.load()
-    return success(surveys)
+    try {
+      const surveys = await this.loadSurveys.load()
+      return success(surveys)
+    } catch (error) {
+      return serverError(error)
+    }
   }
 }
