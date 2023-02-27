@@ -10,7 +10,7 @@ import {
   Collections
 } from '../../infra/db/mongodb/helpers/mongo-helper'
 
-const makeFakeSurveysRequestBody = (): AddSurveyModel => ({
+const makeFakeSurveysRequestBody = (): Omit<AddSurveyModel, 'date'> => ({
   question: 'Question',
   answers: [
     {
