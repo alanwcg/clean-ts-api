@@ -7,9 +7,9 @@ import {
   Authentication,
   AuthenticationModel
 } from './signup-controller-protocols'
-import { EmailInUseError, MissingParamError } from '../../../errors'
 import { SignUpController } from './signup-controller'
-import { badRequest, forbidden, serverError, success } from '../../../helpers/http/http-helper'
+import { EmailInUseError, MissingParamError } from '@/presentation/errors'
+import { badRequest, forbidden, serverError, success } from '@/presentation/helpers/http/http-helper'
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {

@@ -1,6 +1,6 @@
-import { AuthenticationModel } from '../../../domain/usecases/authentication'
 import {
   Authentication,
+  AuthenticationModel,
   LoadAccountByEmailRepository,
   HashComparer,
   Encrypter,

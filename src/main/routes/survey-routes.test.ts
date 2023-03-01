@@ -3,13 +3,13 @@ import { Collection } from 'mongodb'
 import { sign } from 'jsonwebtoken'
 import app from '../config/app'
 import env from '../config/env'
-import { DbAddSurvey } from '../../data/usecases/add-survey/db-add-survey'
-import { DbLoadSurveys } from '../../data/usecases/load-surveys/db-load-surveys'
-import { AddSurveyModel } from '../../domain/usecases/add-survey'
+import { AddSurveyModel } from '@/domain/usecases/add-survey'
+import { DbAddSurvey } from '@/data/usecases/add-survey/db-add-survey'
+import { DbLoadSurveys } from '@/data/usecases/load-surveys/db-load-surveys'
 import {
   MongoHelper,
   Collections
-} from '../../infra/db/mongodb/helpers/mongo-helper'
+} from '@/infra/db/mongodb/helpers/mongo-helper'
 
 const makeFakeSurveysRequestBody = (): Omit<AddSurveyModel, 'date'> => ({
   question: 'Question',

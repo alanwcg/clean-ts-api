@@ -8,7 +8,7 @@ import {
   success,
   noContent,
   serverError
-} from '../../../helpers/http/http-helper'
+} from '@/presentation/helpers/http/http-helper'
 
 export class LoadSurveysController implements Controller {
   constructor (private readonly loadSurveys: LoadSurveys) {}
