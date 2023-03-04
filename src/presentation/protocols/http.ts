@@ -1,6 +1,7 @@
 export type HttpRequest = {
   body?: Record<string, any>
   headers?: Record<string, any>
+  params?: Record<string, any>
 }
 
 export type HttpResponse = {
