@@ -37,10 +37,7 @@ export class MongoHelper {
   }
 
   mapArray<T> (documents: Array<WithId<Document>>): T[] {
-    return documents.map(document => {
-      const { _id, ...rest } = document
-      return Object.assign({}, { id: _id.toString() }, rest) as T
-    })
+    return documents.map(document => this.map(document))
   }
 
   static getInstance (): MongoHelper {
