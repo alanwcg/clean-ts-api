@@ -23,10 +23,7 @@ export class AccountMongoRepository implements
     const mongoHelper = MongoHelper.getInstance()
     const accountCollection = await mongoHelper.getCollection(Collections.ACCOUNTS)
     const account = await accountCollection.findOne<AccountModel>({ email })
-    if (account) {
-      return mongoHelper.map(account)
-    }
-    return null
+    return account && mongoHelper.map(account)
   }
 
   async updateAccessToken ({ id, accessToken }: UpdateParams): Promise<void> {
@@ -52,9 +49,6 @@ export class AccountMongoRepository implements
         }
       ]
     })
-    if (account) {
-      return mongoHelper.map(account)
-    }
-    return null
+    return account && mongoHelper.map(account)
   }
 }
