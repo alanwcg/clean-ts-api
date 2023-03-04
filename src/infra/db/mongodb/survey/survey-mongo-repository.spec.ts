@@ -76,5 +76,17 @@ describe('Survey Mongo Repository', () => {
       expect(survey).toBeTruthy()
       expect(survey.id).toBeTruthy()
     })
+
+    it('should return null if id is not a valid MongoDb ObjectId', async () => {
+      const sut = makeSut()
+      const survey = await sut.loadById('invalid_object_id')
+      expect(survey).toBeFalsy()
+    })
+
+    it('should return null if fails', async () => {
+      const sut = makeSut()
+      const survey = await sut.loadById('64035b3dd52431dc42b33826')
+      expect(survey).toBeFalsy()
+    })
   })
 })
