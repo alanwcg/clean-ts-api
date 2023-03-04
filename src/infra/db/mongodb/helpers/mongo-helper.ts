@@ -3,6 +3,7 @@ import { MongoClient, Collection, Document, WithId } from 'mongodb'
 export enum Collections {
   ACCOUNTS = 'accounts',
   SURVEYS = 'surveys',
+  SURVEY_RESULTS = 'surveyResults',
   ERRORS = 'errors'
 }
 
@@ -30,7 +31,7 @@ export class MongoHelper {
     return this.client.db().collection(name)
   }
 
-  mapper<T> (document: Document): T {
+  map<T> (document: Document): T {
     const { _id, ...rest } = document
     return Object.assign({}, { id: _id.toString() }, rest) as T
   }

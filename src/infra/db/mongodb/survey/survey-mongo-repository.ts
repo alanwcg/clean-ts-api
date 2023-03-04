@@ -29,6 +29,6 @@ export class SurveyMongoRepository implements
     const survey = await surveyCollection.findOne<SurveyModel>({
       _id: new ObjectId(id)
     })
-    return mongoHelper.mapper(survey)
+    return mongoHelper.map(survey)
   }
 }

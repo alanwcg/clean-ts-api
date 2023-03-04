@@ -16,7 +16,7 @@ export class AccountMongoRepository implements
     const mongoHelper = MongoHelper.getInstance()
     const accountCollection = await mongoHelper.getCollection(Collections.ACCOUNTS)
     await accountCollection.insertOne(accountData)
-    return mongoHelper.mapper<AccountModel>(accountData)
+    return mongoHelper.map(accountData)
   }
 
   async loadByEmail (email: string): Promise<AccountModel | null> {
@@ -24,7 +24,7 @@ export class AccountMongoRepository implements
     const accountCollection = await mongoHelper.getCollection(Collections.ACCOUNTS)
     const account = await accountCollection.findOne<AccountModel>({ email })
     if (account) {
-      return mongoHelper.mapper(account)
+      return mongoHelper.map(account)
     }
     return null
   }
@@ -53,7 +53,7 @@ export class AccountMongoRepository implements
       ]
     })
     if (account) {
-      return mongoHelper.mapper(account)
+      return mongoHelper.map(account)
     }
     return null
   }
