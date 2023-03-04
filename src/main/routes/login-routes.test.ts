@@ -2,8 +2,8 @@ import request from 'supertest'
 import bcrypt from 'bcrypt'
 import { Collection } from 'mongodb'
 import app from '../config/app'
-import { DbAddAccount } from '@/data/usecases/add-account/db-add-account'
-import { DbAuthentication } from '@/data/usecases/authentication/db-authentication'
+import { DbAddAccount } from '@/data/usecases/account/add-account/db-add-account'
+import { DbAuthentication } from '@/data/usecases/account/authentication/db-authentication'
 import {
   MongoHelper,
   Collections
