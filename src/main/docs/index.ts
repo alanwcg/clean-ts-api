@@ -1,14 +1,16 @@
-import { loginPath, surveysPath, signupPath } from './paths'
+import { loginPath, surveysPath, signupPath, surveyResultPath } from './paths'
 import {
   accountSchema,
   loginParamsSchema,
-  errorSchema,
   surveySchema,
   surveyAnswerSchema,
   surveysSchema,
   apiKeyAuthSchema,
   signupParamsSchema,
-  addSurveyParamsSchema
+  addSurveyParamsSchema,
+  saveSurveyResultParamsSchema,
+  surveyResultSchema,
+  errorSchema
 } from './schemas'
 import {
   badRequest,
@@ -30,22 +32,17 @@ export default {
     url: 'https://www.mit.edu/~amini/LICENSE.md'
   },
   servers: [
-    {
-      url: '/api'
-    }
+    { url: '/api' }
   ],
   tags: [
-    {
-      name: 'Login'
-    },
-    {
-      name: 'Enquete'
-    }
+    { name: 'Login' },
+    { name: 'Enquete' }
   ],
   paths: {
     '/login': loginPath,
     '/signup': signupPath,
-    '/surveys': surveysPath
+    '/surveys': surveysPath,
+    '/surveys/{surveyId}/results': surveyResultPath
   },
   schemas: {
     account: accountSchema,
@@ -55,6 +52,8 @@ export default {
     surveys: surveysSchema,
     signupParams: signupParamsSchema,
     addSurveyParams: addSurveyParamsSchema,
+    saveSurveyResultParams: saveSurveyResultParamsSchema,
+    surveyResult: surveyResultSchema,
     error: errorSchema
   },
   components: {

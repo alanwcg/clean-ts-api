@@ -3,11 +3,11 @@ export const loginParamsSchema = {
   properties: {
     email: {
       type: 'string',
-      example: 'email@mail.com'
+      example: 'alancintra7@gmail.com'
     },
     password: {
       type: 'string',
-      example: 'any_password'
+      example: '123456'
     }
   },
   required: ['email', 'password']
