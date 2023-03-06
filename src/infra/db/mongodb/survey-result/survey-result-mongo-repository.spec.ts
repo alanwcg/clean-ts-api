@@ -3,7 +3,7 @@ import { SurveyResultMongoRepository } from './survey-result-mongo-repository'
 import { Collections, MongoHelper } from '../helpers/mongo-helper'
 import { SurveyModel } from '@/domain/models/survey'
 import { AccountModel } from '@/domain/models/account'
-import { SaveSurveyResultModel } from '@/domain/usecases/survey-result/save-survey-result'
+import { SaveSurveyResultParams } from '@/domain/usecases/survey-result/save-survey-result'
 import { SurveyResultModel } from '@/domain/models/survey-result'
 
 let surveyCollection: Collection
@@ -40,7 +40,7 @@ const makeFakeAccount = async (): Promise<AccountModel> => {
 }
 
 const makeFakeSurveyResultData = async (
-  data: SaveSurveyResultModel
+  data: SaveSurveyResultParams
 ): Promise<SurveyResultModel> => {
   await surveyResultCollection.insertOne(data)
   return mongoHelper.map(data)

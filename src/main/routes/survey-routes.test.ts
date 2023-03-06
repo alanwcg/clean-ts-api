@@ -3,7 +3,7 @@ import { Collection } from 'mongodb'
 import { sign } from 'jsonwebtoken'
 import app from '../config/app'
 import env from '../config/env'
-import { AddSurveyModel } from '@/domain/usecases/survey/add-survey'
+import { AddSurveyParams } from '@/domain/usecases/survey/add-survey'
 import { DbAddSurvey } from '@/data/usecases/survey/add-survey/db-add-survey'
 import { DbLoadSurveys } from '@/data/usecases/survey/load-surveys/db-load-surveys'
 import {
@@ -11,7 +11,7 @@ import {
   Collections
 } from '@/infra/db/mongodb/helpers/mongo-helper'
 
-const makeFakeSurveysRequestBody = (): Omit<AddSurveyModel, 'date'> => ({
+const makeFakeSurveysRequestBody = (): Omit<AddSurveyParams, 'date'> => ({
   question: 'Question',
   answers: [
     {

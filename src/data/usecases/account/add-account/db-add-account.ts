@@ -2,7 +2,7 @@ import {
   AddAccount,
   Hasher,
   AddAccountRepository,
-  AddAccountModel,
+  AddAccountParams,
   AccountModel,
   LoadAccountByEmailRepository
 } from './db-add-account-protocols'
@@ -14,7 +14,7 @@ export class DbAddAccount implements AddAccount {
     private readonly addAccountRepository: AddAccountRepository
   ) {}
 
-  async add (accountData: AddAccountModel): Promise<AccountModel> {
+  async add (accountData: AddAccountParams): Promise<AccountModel> {
     const accountExists = await this.loadAccountByEmailRepository.loadByEmail(
       accountData.email
     )
