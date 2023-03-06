@@ -1,9 +1,9 @@
 export const errorSchema = {
   type: 'object',
   properties: {
-    message: {
+    error: {
       type: 'string',
-      example: 'error message'
+      example: 'Mensagem de erro'
     }
   }
 }
