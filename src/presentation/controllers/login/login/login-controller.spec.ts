@@ -66,7 +66,7 @@ describe('Login Controller', () => {
     const { sut, authenticationStub } = makeSut()
     jest.spyOn(authenticationStub, 'auth')
       .mockReturnValueOnce(
-        new Promise(resolve => resolve(null as unknown as string))
+        Promise.resolve(null as unknown as string)
       )
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(unauthorized())
