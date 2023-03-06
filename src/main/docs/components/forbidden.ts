@@ -1,5 +1,5 @@
-export const serverError = {
-  description: 'Erro de Servidor',
+export const forbidden = {
+  description: 'Acesso Negado',
   content: {
     'application/json': {
       schema: {
@@ -7,7 +7,7 @@ export const serverError = {
         properties: {
           error: {
             type: 'string',
-            example: 'Internal Server Error'
+            example: 'Access denied'
           }
         }
       }
