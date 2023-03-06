@@ -1,5 +1,10 @@
 import { AccountModel } from '@/domain/models/account'
 
+export type LoadByTokenParams = {
+  token: string
+  role?: string
+}
+
 export interface LoadAccountByTokenRepository {
-  loadByToken: (token: string, role?: string) => Promise<AccountModel | null>
+  loadByToken: (params: LoadByTokenParams) => Promise<AccountModel | null>
 }
