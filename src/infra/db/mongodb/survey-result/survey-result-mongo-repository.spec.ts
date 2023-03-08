@@ -1,49 +1,40 @@
-import { Collection } from 'mongodb'
+import { Collection, ObjectId } from 'mongodb'
 import { SurveyResultMongoRepository } from './survey-result-mongo-repository'
 import { Collections, MongoHelper } from '../helpers/mongo-helper'
 import { SurveyModel } from '@/domain/models/survey'
 import { AccountModel } from '@/domain/models/account'
-import { SaveSurveyResultParams } from '@/domain/usecases/survey-result/save-survey-result'
-import { SurveyResultModel } from '@/domain/models/survey-result'
 
 let surveyCollection: Collection
 let accountCollection: Collection
 let surveyResultCollection: Collection
 let mongoHelper: MongoHelper
 
-const makeFakeSurvey = async (): Promise<SurveyModel> => {
-  const fakeSurveyData = {
+const makeSurvey = async (): Promise<SurveyModel> => {
+  const surveyData = {
     question: 'any_question',
     answers: [
       {
+        image: 'any_image',
         answer: 'any_answer'
       },
       {
-        image: 'any_image',
-        answer: 'any_answer'
+        answer: 'other_answer'
       }
     ],
     date: new Date()
   }
-  await surveyCollection.insertOne(fakeSurveyData)
-  return mongoHelper.map(fakeSurveyData)
+  await surveyCollection.insertOne(surveyData)
+  return mongoHelper.map(surveyData)
 }
 
-const makeFakeAccount = async (): Promise<AccountModel> => {
-  const fakeAccountData = {
+const makeAccount = async (): Promise<AccountModel> => {
+  const accountData = {
     name: 'any_name',
     email: 'any_email@mail.com',
     password: 'any_password'
   }
-  await accountCollection.insertOne(fakeAccountData)
-  return mongoHelper.map(fakeAccountData)
-}
-
-const makeFakeSurveyResultData = async (
-  data: SaveSurveyResultParams
-): Promise<SurveyResultModel> => {
-  await surveyResultCollection.insertOne(data)
-  return mongoHelper.map(data)
+  await accountCollection.insertOne(accountData)
+  return mongoHelper.map(accountData)
 }
 
 const makeSut = (): SurveyResultMongoRepository => {
@@ -73,8 +64,8 @@ describe('Survey Mongo Repository', () => {
 
   describe('save()', () => {
     it('should add a survey result if its new', async () => {
-      const survey = await makeFakeSurvey()
-      const account = await makeFakeAccount()
+      const survey = await makeSurvey()
+      const account = await makeAccount()
       const sut = makeSut()
       const surveyResult = await sut.save({
         surveyId: survey.id,
@@ -83,16 +74,18 @@ describe('Survey Mongo Repository', () => {
         date: new Date()
       })
       expect(surveyResult).toBeTruthy()
-      expect(surveyResult.id).toBeTruthy()
-      expect(surveyResult.answer).toBe(survey.answers[0].answer)
+      expect(surveyResult.surveyId).toBe(survey.id)
+      expect(surveyResult.answers[0].answer).toBe(survey.answers[0].answer)
+      expect(surveyResult.answers[0].count).toBe(1)
+      expect(surveyResult.answers[0].percent).toBe(100)
     })
 
     it('should update survey result if its not new', async () => {
-      const survey = await makeFakeSurvey()
-      const account = await makeFakeAccount()
-      const res = await makeFakeSurveyResultData({
-        surveyId: survey.id,
-        accountId: account.id,
+      const survey = await makeSurvey()
+      const account = await makeAccount()
+      await surveyResultCollection.insertOne({
+        surveyId: new ObjectId(survey.id),
+        accountId: new ObjectId(account.id),
         answer: survey.answers[0].answer,
         date: new Date()
       })
@@ -104,8 +97,10 @@ describe('Survey Mongo Repository', () => {
         date: new Date()
       })
       expect(surveyResult).toBeTruthy()
-      expect(surveyResult.id).toBe(res.id)
-      expect(surveyResult.answer).toBe(survey.answers[1].answer)
+      expect(surveyResult.surveyId).toBe(survey.id)
+      expect(surveyResult.answers[0].answer).toBe(survey.answers[1].answer)
+      expect(surveyResult.answers[0].count).toBe(1)
+      expect(surveyResult.answers[0].percent).toBe(100)
     })
   })
 })
