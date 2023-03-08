@@ -29,9 +29,9 @@ export class QueryBuilder {
     return this
   }
 
-  addFields (data: Record<string, any>): QueryBuilder {
+  sort (data: Record<string, any>): QueryBuilder {
     this.query.push({
-      $addFields: data
+      $sort: data
     })
     return this
   }
