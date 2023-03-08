@@ -14,6 +14,7 @@ import {
 } from '@/presentation/helpers/http/http-helper'
 import { mockValidator } from '@/validation/test'
 import { mockAddAccount, mockAuthentication } from '@/presentation/test'
+import { throwError } from '@/domain/test'
 
 const mockRequest = (): HttpRequest => ({
   body: {
@@ -108,9 +109,7 @@ describe('SignUp Controller', () => {
 
   it('should return 500 if Authentication throws', async () => {
     const { sut, authenticationStub } = makeSut()
-    jest.spyOn(authenticationStub, 'auth').mockImplementationOnce(async () => {
-      throw new Error()
-    })
+    jest.spyOn(authenticationStub, 'auth').mockImplementationOnce(throwError)
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(serverError(new Error()))
   })

@@ -2,7 +2,7 @@ import MockDate from 'mockdate'
 import { DbLoadSurveys } from './db-load-surveys'
 import { LoadSurveysRepository } from './db-load-surveys-protocols'
 import { mockLoadSurveysRepository } from '@/data/test'
-import { mockSurveyModels } from '@/domain/test'
+import { mockSurveyModels, throwError } from '@/domain/test'
 
 type SutTypes = {
   sut: DbLoadSurveys
@@ -43,9 +43,7 @@ describe('DbLoadSurveys', () => {
   it('should throw if LoadSurveysRepository throws', async () => {
     const { sut, loadSurveysRepositoryStub } = makeSut()
     jest.spyOn(loadSurveysRepositoryStub, 'loadAll')
-      .mockImplementationOnce(() => {
-        throw new Error()
-      })
+      .mockImplementationOnce(throwError)
     const promise = sut.load()
     await expect(promise).rejects.toThrow()
   })

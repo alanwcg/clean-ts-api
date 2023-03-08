@@ -8,6 +8,7 @@ import {
   MongoHelper,
   Collections
 } from '@/infra/db/mongodb/helpers/mongo-helper'
+import { throwError } from '@/domain/test'
 
 type SignUpRequestBody = {
   name: string
@@ -64,9 +65,9 @@ describe('Login Routes', () => {
     })
 
     it('should return 500 if unexpected error occurred', async () => {
-      jest.spyOn(DbAddAccount.prototype, 'add').mockImplementationOnce(() => {
-        throw new Error()
-      })
+      jest.spyOn(DbAddAccount.prototype, 'add').mockImplementationOnce(
+        throwError
+      )
       await request(app)
         .post('/api/signup')
         .send(makeFakeSignUpRequestBody())
@@ -116,9 +117,8 @@ describe('Login Routes', () => {
 
     it('should return 500 if unexpected error occurred', async () => {
       jest.spyOn(DbAuthentication.prototype, 'auth').mockImplementationOnce(
-        () => {
-          throw new Error()
-        })
+        throwError
+      )
       await request(app)
         .post('/api/login')
         .send(makeFakeLoginRequestBody())

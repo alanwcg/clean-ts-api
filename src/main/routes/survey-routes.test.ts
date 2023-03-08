@@ -10,6 +10,7 @@ import {
   MongoHelper,
   Collections
 } from '@/infra/db/mongodb/helpers/mongo-helper'
+import { throwError } from '@/domain/test'
 
 const makeFakeSurveysRequestBody = (): Omit<AddSurveyParams, 'date'> => ({
   question: 'Question',
@@ -75,9 +76,9 @@ describe('Survey Routes', () => {
     })
 
     it('should return 500 if unexpected error occurred', async () => {
-      jest.spyOn(DbAddSurvey.prototype, 'add').mockImplementationOnce(() => {
-        throw new Error()
-      })
+      jest.spyOn(DbAddSurvey.prototype, 'add').mockImplementationOnce(
+        throwError
+      )
       await request(app)
         .post('/api/surveys')
         .set('x-access-token', accessToken)
@@ -102,9 +103,9 @@ describe('Survey Routes', () => {
     })
 
     it('should return 500 if unexpected error occurred', async () => {
-      jest.spyOn(DbLoadSurveys.prototype, 'load').mockImplementationOnce(() => {
-        throw new Error()
-      })
+      jest.spyOn(DbLoadSurveys.prototype, 'load').mockImplementationOnce(
+        throwError
+      )
       await request(app)
         .get('/api/surveys')
         .set('x-access-token', accessToken)
