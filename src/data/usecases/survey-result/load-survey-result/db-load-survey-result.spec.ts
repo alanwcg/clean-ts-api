@@ -1,19 +1,24 @@
 import { DbLoadSurveyResult } from './db-load-survey-result'
-import {
-  LoadSurveyResultRepository,
-  SurveyResultModel
-} from './db-load-survey-result-protocols'
-import { mockSurveyResultModel } from '@/domain/test'
+import { LoadSurveyResultRepository } from './db-load-survey-result-protocols'
+import { mockLoadSurveyResultRepository } from '@/data/test'
+
+type SutTypes = {
+  sut: DbLoadSurveyResult
+  loadSurveyResultRepositoryStub: LoadSurveyResultRepository
+}
+
+const makeSut = (): SutTypes => {
+  const loadSurveyResultRepositoryStub = mockLoadSurveyResultRepository()
+  const sut = new DbLoadSurveyResult(loadSurveyResultRepositoryStub)
+  return {
+    sut,
+    loadSurveyResultRepositoryStub
+  }
+}
 
 describe('DbLoadSurveyResult UseCase', () => {
   it('should call LoadSurveyResultRepository with correct surveyId', async () => {
-    class LoadSurveyResultRepositoryStub implements LoadSurveyResultRepository {
-      async loadBySurveyId (surveyId: string): Promise<SurveyResultModel> {
-        return Promise.resolve(mockSurveyResultModel())
-      }
-    }
-    const loadSurveyResultRepositoryStub = new LoadSurveyResultRepositoryStub()
-    const sut = new DbLoadSurveyResult(loadSurveyResultRepositoryStub)
+    const { sut, loadSurveyResultRepositoryStub } = makeSut()
     const loadBySurveyIdSpy = jest.spyOn(
       loadSurveyResultRepositoryStub,
       'loadBySurveyId'
