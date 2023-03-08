@@ -12,7 +12,7 @@ jest.mock('bcrypt', () => ({
   }
 }))
 
-const makeFakeCompareParams = (): CompareParams => ({
+const mockCompareParams = (): CompareParams => ({
   value: 'any_value',
   hash: 'any_hash'
 })
@@ -49,27 +49,27 @@ describe('Bcrypt Adapter', () => {
     it('should calls compare with correct values', async () => {
       const sut = makeSut()
       const compareSpy = jest.spyOn(bcrypt, 'compare')
-      await sut.compare(makeFakeCompareParams())
+      await sut.compare(mockCompareParams())
       expect(compareSpy).toHaveBeenCalledWith('any_value', 'any_hash')
     })
 
     it('should return true when compare succeeds', async () => {
       const sut = makeSut()
-      const isValid = await sut.compare(makeFakeCompareParams())
+      const isValid = await sut.compare(mockCompareParams())
       expect(isValid).toBe(true)
     })
 
     it('should return false when compare fails', async () => {
       const sut = makeSut()
       jest.spyOn(bcrypt, 'compare').mockImplementationOnce(() => false)
-      const isValid = await sut.compare(makeFakeCompareParams())
+      const isValid = await sut.compare(mockCompareParams())
       expect(isValid).toBe(false)
     })
 
     it('should throw if compare throws', async () => {
       const sut = makeSut()
       jest.spyOn(bcrypt, 'compare').mockImplementationOnce(throwError)
-      const promise = sut.compare(makeFakeCompareParams())
+      const promise = sut.compare(mockCompareParams())
       await expect(promise).rejects.toThrow()
     })
   })

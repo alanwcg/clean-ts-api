@@ -12,7 +12,7 @@ import {
 } from '@/infra/db/mongodb/helpers/mongo-helper'
 import { throwError } from '@/domain/test'
 
-const makeFakeSurveysRequestBody = (): Omit<AddSurveyParams, 'date'> => ({
+const mockAddSurveyParams = (): Omit<AddSurveyParams, 'date'> => ({
   question: 'Question',
   answers: [
     {
@@ -71,7 +71,7 @@ describe('Survey Routes', () => {
     it('should return 403 without accessToken', async () => {
       await request(app)
         .post('/api/surveys')
-        .send(makeFakeSurveysRequestBody())
+        .send(mockAddSurveyParams())
         .expect(403)
     })
 
@@ -82,7 +82,7 @@ describe('Survey Routes', () => {
       await request(app)
         .post('/api/surveys')
         .set('x-access-token', accessToken)
-        .send(makeFakeSurveysRequestBody())
+        .send(mockAddSurveyParams())
         .expect(500)
     })
 
@@ -90,7 +90,7 @@ describe('Survey Routes', () => {
       await request(app)
         .post('/api/surveys')
         .set('x-access-token', accessToken)
-        .send(makeFakeSurveysRequestBody())
+        .send(mockAddSurveyParams())
         .expect(204)
     })
   })

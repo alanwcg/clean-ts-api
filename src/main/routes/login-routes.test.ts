@@ -19,14 +19,14 @@ type SignUpRequestBody = {
 
 type LoginRequestBody = Pick<SignUpRequestBody, 'email' | 'password'>
 
-const makeFakeSignUpRequestBody = (): SignUpRequestBody => ({
+const mockSignUpRequestBody = (): SignUpRequestBody => ({
   name: 'Alan Cintra',
   email: 'alancintra7@gmail.com',
   password: '123456',
   passwordConfirmation: '123456'
 })
 
-const makeFakeLoginRequestBody = (): LoginRequestBody => ({
+const mockLoginRequestBody = (): LoginRequestBody => ({
   email: 'alancintra7@gmail.com',
   password: '123456'
 })
@@ -70,7 +70,7 @@ describe('Login Routes', () => {
       )
       await request(app)
         .post('/api/signup')
-        .send(makeFakeSignUpRequestBody())
+        .send(mockSignUpRequestBody())
         .expect(500)
         .expect(res => expect(res.body).toEqual({
           error: expect.any(String)
@@ -80,7 +80,7 @@ describe('Login Routes', () => {
     it('should return 200 on signup', async () => {
       await request(app)
         .post('/api/signup')
-        .send(makeFakeSignUpRequestBody())
+        .send(mockSignUpRequestBody())
         .expect(200)
         .expect(res => expect(res.body).toEqual({
           accessToken: expect.any(String)
@@ -121,7 +121,7 @@ describe('Login Routes', () => {
       )
       await request(app)
         .post('/api/login')
-        .send(makeFakeLoginRequestBody())
+        .send(mockLoginRequestBody())
         .expect(500)
         .expect(res => expect(res.body).toEqual({
           error: expect.any(String)
@@ -137,7 +137,7 @@ describe('Login Routes', () => {
       })
       await request(app)
         .post('/api/login')
-        .send(makeFakeLoginRequestBody())
+        .send(mockLoginRequestBody())
         .expect(200)
         .expect(res => expect(res.body).toEqual({
           accessToken: expect.any(String)

@@ -11,7 +11,7 @@ import {
   Collections
 } from '@/infra/db/mongodb/helpers/mongo-helper'
 
-const makeFakeSurveyData = (): AddSurveyParams => ({
+const mockAddSurveyParams = (): AddSurveyParams => ({
   question: 'Question',
   answers: [
     {
@@ -70,7 +70,7 @@ describe('Survey Routes', () => {
   })
 
   it('should return 200 on save survey result with accessToken', async () => {
-    const res = await surveyCollection.insertOne(makeFakeSurveyData())
+    const res = await surveyCollection.insertOne(mockAddSurveyParams())
     const surveyId = res.insertedId.toString()
     await request(app)
       .put(`/api/surveys/${surveyId}/results`)

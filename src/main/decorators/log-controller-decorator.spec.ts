@@ -9,7 +9,7 @@ import {
 import { mockAccountModel } from '@/domain/test'
 import { mockLogErrorRepository } from '@/data/test'
 
-const makeFakeRequest = (): HttpRequest => ({
+const mockRequest = (): HttpRequest => ({
   body: {
     name: 'any_name',
     email: 'any_email@mail.com',
@@ -18,7 +18,7 @@ const makeFakeRequest = (): HttpRequest => ({
   }
 })
 
-const makeFakeError = (): Error => {
+const mockError = (): Error => {
   const fakeError = new Error()
   fakeError.stack = 'any_stack'
   return fakeError
@@ -54,14 +54,14 @@ describe('Log Controller Decorator', () => {
   it('should call controller handle', async () => {
     const { sut, controllerStub } = makeSut()
     const handleSpy = jest.spyOn(controllerStub, 'handle')
-    const httpRequest = makeFakeRequest()
+    const httpRequest = mockRequest()
     await sut.handle(httpRequest)
     expect(handleSpy).toHaveBeenCalledWith(httpRequest)
   })
 
   it('should return the same result of the controller', async () => {
     const { sut } = makeSut()
-    const httpResponse = await sut.handle(makeFakeRequest())
+    const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(success(mockAccountModel()))
   })
 
@@ -69,18 +69,18 @@ describe('Log Controller Decorator', () => {
     const { sut, controllerStub, logErrorRepositoryStub } = makeSut()
     const logErrorSpy = jest.spyOn(logErrorRepositoryStub, 'logError')
     jest.spyOn(controllerStub, 'handle').mockReturnValueOnce(
-      Promise.resolve(serverError(makeFakeError()))
+      Promise.resolve(serverError(mockError()))
     )
-    await sut.handle(makeFakeRequest())
+    await sut.handle(mockRequest())
     expect(logErrorSpy).toHaveBeenCalledWith('any_stack')
   })
 
   it('should return httpResponse body with error message if controller returns a server error', async () => {
     const { sut, controllerStub } = makeSut()
     jest.spyOn(controllerStub, 'handle').mockReturnValueOnce(
-      Promise.resolve(serverError(makeFakeError()))
+      Promise.resolve(serverError(mockError()))
     )
-    const httpResponse = await sut.handle(makeFakeRequest())
-    expect(httpResponse).toEqual(serverError(makeFakeError()))
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse).toEqual(serverError(mockError()))
   })
 })
