@@ -19,5 +19,6 @@ export const surveySchema = {
       type: 'string',
       example: '2023-02-27T23:51:50.549Z'
     }
-  }
+  },
+  required: ['id', 'question', 'answers', 'date']
 }

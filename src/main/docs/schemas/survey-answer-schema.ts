@@ -9,5 +9,6 @@ export const surveyAnswerSchema = {
       type: 'string',
       example: 'Resposta da pergunta'
     }
-  }
+  },
+  required: ['answer']
 }
