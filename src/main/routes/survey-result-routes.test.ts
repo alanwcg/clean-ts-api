@@ -67,17 +67,37 @@ describe('Survey Routes', () => {
         })
         .expect(403)
     })
+
+    it('should return 200 on save survey result with accessToken', async () => {
+      const res = await surveyCollection.insertOne(mockAddSurveyParams())
+      const surveyId = res.insertedId.toString()
+      await request(app)
+        .put(`/api/surveys/${surveyId}/results`)
+        .set('x-access-token', accessToken)
+        .send({
+          answer: 'Answer 1'
+        })
+        .expect(200)
+    })
   })
 
-  it('should return 200 on save survey result with accessToken', async () => {
-    const res = await surveyCollection.insertOne(mockAddSurveyParams())
-    const surveyId = res.insertedId.toString()
-    await request(app)
-      .put(`/api/surveys/${surveyId}/results`)
-      .set('x-access-token', accessToken)
-      .send({
-        answer: 'Answer 1'
-      })
-      .expect(200)
+  describe('[GET] /surveys/:surveyId/results', () => {
+    it('should return 403 on load survey result without accessToken', async () => {
+      await request(app)
+        .get('/api/surveys/any_id/results')
+        .expect(403)
+    })
+
+    // it('should return 200 on save survey result with accessToken', async () => {
+    //   const res = await surveyCollection.insertOne(mockAddSurveyParams())
+    //   const surveyId = res.insertedId.toString()
+    //   await request(app)
+    //     .put(`/api/surveys/${surveyId}/results`)
+    //     .set('x-access-token', accessToken)
+    //     .send({
+    //       answer: 'Answer 1'
+    //     })
+    //     .expect(200)
+    // })
   })
 })
