@@ -1,47 +1,43 @@
+import { faker } from '@faker-js/faker'
 import { ValidatorComposite } from './validator-composite'
 import { MissingParamError } from '@/presentation/errors'
-import { Validator } from '@/presentation/protocols'
-import { mockValidator } from '@/validation/test'
+import { ValidatorSpy } from '@/validation/test'
+
+const field = faker.random.word()
 
 type SutTypes = {
   sut: ValidatorComposite
-  validatorStubs: Validator[]
+  validatorSpies: ValidatorSpy[]
 }
 
 const makeSut = (): SutTypes => {
-  const validatorStubs = [mockValidator(), mockValidator()]
-  const sut = new ValidatorComposite(validatorStubs)
+  const validatorSpies = [new ValidatorSpy(), new ValidatorSpy()]
+  const sut = new ValidatorComposite(validatorSpies)
   return {
     sut,
-    validatorStubs
+    validatorSpies
   }
 }
 
 describe('Validator Composite', () => {
   it('should return an error if any validator fails', () => {
-    const { sut, validatorStubs } = makeSut()
-    jest.spyOn(validatorStubs[0], 'validate').mockReturnValueOnce(
-      new MissingParamError('field')
-    )
-    const error = sut.validate({ field: 'any_value' })
-    expect(error).toEqual(new MissingParamError('field'))
+    const { sut, validatorSpies } = makeSut()
+    validatorSpies[1].error = new MissingParamError(field)
+    const error = sut.validate({ [field]: faker.random.word() })
+    expect(error).toEqual(validatorSpies[1].error)
   })
 
   it('should return the first error if more than one validator fails', () => {
-    const { sut, validatorStubs } = makeSut()
-    jest.spyOn(validatorStubs[0], 'validate').mockReturnValueOnce(
-      new Error()
-    )
-    jest.spyOn(validatorStubs[1], 'validate').mockReturnValueOnce(
-      new MissingParamError('field')
-    )
-    const error = sut.validate({ field: 'any_value' })
-    expect(error).toEqual(new Error())
+    const { sut, validatorSpies } = makeSut()
+    validatorSpies[0].error = new Error()
+    validatorSpies[1].error = new MissingParamError(field)
+    const error = sut.validate({ [field]: faker.random.word() })
+    expect(error).toEqual(validatorSpies[0].error)
   })
 
   it('should not return if validation succeeds', () => {
     const { sut } = makeSut()
-    const error = sut.validate({ field: 'any_value' })
+    const error = sut.validate({ [field]: faker.random.word() })
     expect(error).toBeFalsy()
   })
 })

@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker'
 import { Hasher } from '@/data/protocols/criptography/hasher'
 import { Decrypter } from '@/data/protocols/criptography/decrypter'
 import { Encrypter } from '@/data/protocols/criptography/encrypter'
@@ -6,38 +7,42 @@ import {
   CompareParams
 } from '@/data/protocols/criptography/hash-comparer'
 
-export const mockHasher = (): Hasher => {
-  class HasherStub implements Hasher {
-    async hash (value: string): Promise<string> {
-      return Promise.resolve('hashed_password')
-    }
+export class HasherSpy implements Hasher {
+  value: string
+  result: string = faker.datatype.uuid()
+
+  async hash (value: string): Promise<string> {
+    this.value = value
+    return this.result
   }
-  return new HasherStub()
 }
 
-export const mockDecrypter = (): Decrypter => {
-  class DecrypterStub implements Decrypter {
-    async decrypt (value: string): Promise<string | null> {
-      return 'any_value'
-    }
+export class DecrypterSpy implements Decrypter {
+  value: string
+  result: string = faker.internet.password()
+
+  async decrypt (value: string): Promise<string | null> {
+    this.value = value
+    return this.result
   }
-  return new DecrypterStub()
 }
 
-export const mockEncrypter = (): Encrypter => {
-  class EncrypterStub implements Encrypter {
-    async encrypt (value: string): Promise<string> {
-      return 'any_token'
-    }
+export class EncrypterSpy implements Encrypter {
+  value: string
+  result: string = faker.datatype.uuid()
+
+  async encrypt (value: string): Promise<string> {
+    this.value = value
+    return this.result
   }
-  return new EncrypterStub()
 }
 
-export const mockHashCompare = (): HashComparer => {
-  class HashComparerStub implements HashComparer {
-    async compare (params: CompareParams): Promise<boolean> {
-      return true
-    }
+export class HashComparerSpy implements HashComparer {
+  params: CompareParams
+  result: boolean = true
+
+  async compare (params: CompareParams): Promise<boolean> {
+    this.params = params
+    return this.result
   }
-  return new HashComparerStub()
 }

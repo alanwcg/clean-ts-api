@@ -8,7 +8,7 @@ import {
   ValidatorComposite
 } from '@/validation/validators'
 
-jest.mock('../../../../../validation/validators/validator-composite')
+jest.mock('@/validation/validators/validator-composite')
 
 const makeEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {

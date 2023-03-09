@@ -3,27 +3,11 @@ import { Collection } from 'mongodb'
 import { sign } from 'jsonwebtoken'
 import env from '../config/env'
 import app from '../config/app'
-import { AddSurveyParams } from '@/domain/usecases/survey/add-survey'
-// import { DbAddSurvey } from '@/data/usecases/survey/add-survey/db-add-survey'
-// import { DbLoadSurveys } from '@/data/usecases/survey/load-surveys/db-load-surveys'
 import {
   MongoHelper,
   Collections
 } from '@/infra/db/mongodb/helpers/mongo-helper'
-
-const mockAddSurveyParams = (): AddSurveyParams => ({
-  question: 'Question',
-  answers: [
-    {
-      image: 'http://image-name.com',
-      answer: 'Answer 1'
-    },
-    {
-      answer: 'Answer 2'
-    }
-  ],
-  date: new Date()
-})
+import { mockAddSurveyParams } from '@/domain/test'
 
 let surveyCollection: Collection
 let accountCollection: Collection
@@ -69,13 +53,14 @@ describe('Survey Routes', () => {
     })
 
     it('should return 200 on save survey result with accessToken', async () => {
-      const res = await surveyCollection.insertOne(mockAddSurveyParams())
+      const params = mockAddSurveyParams()
+      const res = await surveyCollection.insertOne(params)
       const surveyId = res.insertedId.toString()
       await request(app)
         .put(`/api/surveys/${surveyId}/results`)
         .set('x-access-token', accessToken)
         .send({
-          answer: 'Answer 1'
+          answer: params.answers[0].answer
         })
         .expect(200)
     })

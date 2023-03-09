@@ -22,7 +22,7 @@ const makeSut = (): BcryptAdapter => {
   return new BcryptAdapter(SALT)
 }
 
-describe('Bcrypt Adapter', () => {
+describe('BcryptAdapter', () => {
   describe('', () => {
     it('should calls hash with correct values', async () => {
       const sut = makeSut()

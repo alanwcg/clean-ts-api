@@ -1,4 +1,5 @@
 import { Collection } from 'mongodb'
+import { faker } from '@faker-js/faker'
 import { LogMongoRepository } from './log-mongo-repository'
 import { Collections, MongoHelper } from '../helpers/mongo-helper'
 
@@ -6,7 +7,7 @@ const makeSut = (): LogMongoRepository => {
   return new LogMongoRepository()
 }
 
-describe('Log Mongo Repository', () => {
+describe('LogMongoRepository', () => {
   const mongoHelper = MongoHelper.getInstance()
   let errorCollection: Collection
 
@@ -27,7 +28,7 @@ describe('Log Mongo Repository', () => {
 
   it('should create an error log on success', async () => {
     const sut = makeSut()
-    await sut.logError('any_error')
+    await sut.logError(faker.random.words())
     const count = await errorCollection.countDocuments()
     expect(count).toBe(1)
   })

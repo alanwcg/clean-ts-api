@@ -1,9 +1,6 @@
+import { faker } from '@faker-js/faker'
 import { LoginController } from './login-controller'
-import {
-  HttpRequest,
-  Validator,
-  Authentication
-} from './login-controller-protocols'
+import { HttpRequest } from './login-controller-protocols'
 import {
   badRequest,
   serverError,
@@ -11,78 +8,72 @@ import {
   unauthorized
 } from '@/presentation/helpers/http/http-helper'
 import { MissingParamError } from '@/presentation/errors'
-import { mockAuthentication } from '@/presentation/test'
-import { mockValidator } from '@/validation/test'
-import { throwError } from '@/domain/test'
+import { AuthenticationSpy } from '@/presentation/test'
+import { ValidatorSpy } from '@/validation/test'
+import { mockAuthenticationParams, throwError } from '@/domain/test'
 
 const mockRequest = (): HttpRequest => ({
-  body: {
-    email: 'any_email@mail.com',
-    password: 'any_password'
-  }
+  body: mockAuthenticationParams()
 })
 
 type SutTypes = {
   sut: LoginController
-  validatorStub: Validator
-  authenticationStub: Authentication
+  validatorSpy: ValidatorSpy
+  authenticationSpy: AuthenticationSpy
 }
 
 const makeSut = (): SutTypes => {
-  const validatorStub = mockValidator()
-  const authenticationStub = mockAuthentication()
-  const sut = new LoginController(validatorStub, authenticationStub)
+  const validatorSpy = new ValidatorSpy()
+  const authenticationSpy = new AuthenticationSpy()
+  const sut = new LoginController(validatorSpy, authenticationSpy)
   return {
     sut,
-    validatorStub,
-    authenticationStub
+    validatorSpy,
+    authenticationSpy
   }
 }
 
-describe('Login Controller', () => {
+describe('LoginController', () => {
   it('should call Validator with correct value', async () => {
-    const { sut, validatorStub } = makeSut()
-    const validateSpy = jest.spyOn(validatorStub, 'validate')
+    const { sut, validatorSpy } = makeSut()
     const httpRequest = mockRequest()
     await sut.handle(httpRequest)
-    expect(validateSpy).toHaveBeenCalledWith(httpRequest.body)
+    expect(validatorSpy.input).toEqual(httpRequest.body)
   })
 
   it('should return 400 if Validator returns an error', async () => {
-    const { sut, validatorStub } = makeSut()
-    jest.spyOn(validatorStub, 'validate').mockReturnValueOnce(new MissingParamError('any_field'))
+    const { sut, validatorSpy } = makeSut()
+    validatorSpy.error = new MissingParamError(faker.random.word())
     const httpResponse = await sut.handle(mockRequest())
-    expect(httpResponse).toEqual(badRequest(new MissingParamError('any_field')))
+    expect(httpResponse).toEqual(badRequest(validatorSpy.error))
   })
 
   it('should call Authentication with correct values', async () => {
-    const { sut, authenticationStub } = makeSut()
-    const authSpy = jest.spyOn(authenticationStub, 'auth')
+    const { sut, authenticationSpy } = makeSut()
     const httpRequest = mockRequest()
     await sut.handle(httpRequest)
-    expect(authSpy).toHaveBeenCalledWith(httpRequest.body)
+    expect(authenticationSpy.params).toEqual(httpRequest.body)
   })
 
   it('should return 401 if invalid credentials are provided', async () => {
-    const { sut, authenticationStub } = makeSut()
-    jest.spyOn(authenticationStub, 'auth')
-      .mockReturnValueOnce(
-        Promise.resolve(null as unknown as string)
-      )
+    const { sut, authenticationSpy } = makeSut()
+    authenticationSpy.result = null
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(unauthorized())
   })
 
   it('should return 500 if Authentication throws', async () => {
-    const { sut, authenticationStub } = makeSut()
-    jest.spyOn(authenticationStub, 'auth').mockImplementationOnce(throwError)
+    const { sut, authenticationSpy } = makeSut()
+    jest.spyOn(authenticationSpy, 'auth').mockImplementationOnce(throwError)
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(serverError(new Error()))
   })
 
   it('should return 200 if valid credentials are provided', async () => {
-    const { sut } = makeSut()
+    const { sut, authenticationSpy } = makeSut()
     const httpResponse = await sut.handle(mockRequest())
-    expect(httpResponse).toEqual(success({ accessToken: 'any_token' }))
+    expect(httpResponse).toEqual(success({
+      accessToken: authenticationSpy.result
+    }))
   })
 })

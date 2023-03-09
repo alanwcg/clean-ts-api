@@ -1,53 +1,57 @@
+import { faker } from '@faker-js/faker'
 import { SurveyModel } from '@/domain/models/survey'
 import { AddSurveyParams } from '@/domain/usecases/survey/add-survey'
 
 export const mockAddSurveyParams = (): AddSurveyParams => ({
-  question: 'any_question',
+  question: faker.lorem.text(),
   answers: [
     {
-      image: 'any_image',
-      answer: 'any_answer'
+      image: faker.random.word(),
+      answer: faker.lorem.text()
+    },
+    {
+      answer: faker.lorem.text()
     }
   ],
-  date: new Date()
+  date: faker.date.recent()
 })
 
 export const mockSurveyModel = (): SurveyModel => ({
-  id: 'any_id',
-  question: 'any_question',
+  id: faker.datatype.uuid(),
+  question: faker.lorem.text(),
   answers: [
     {
-      image: 'any_image',
-      answer: 'any_answer'
+      image: faker.random.word(),
+      answer: faker.lorem.text()
     },
     {
-      answer: 'other_answer'
+      answer: faker.lorem.text()
     }
   ],
-  date: new Date()
+  date: faker.date.recent()
 })
 
 export const mockSurveyModels = (): SurveyModel[] => ([
   {
-    id: 'any_id',
-    question: 'any_question',
+    id: faker.datatype.uuid(),
+    question: faker.lorem.text(),
     answers: [
       {
-        image: 'any_image',
-        answer: 'any_answer'
+        image: faker.random.word(),
+        answer: faker.lorem.text()
       }
     ],
-    date: new Date()
+    date: faker.date.recent()
   },
   {
-    id: 'other_id',
-    question: 'other_question',
+    id: faker.datatype.uuid(),
+    question: faker.lorem.text(),
     answers: [
       {
-        image: 'other_image',
-        answer: 'other_answer'
+        image: faker.random.word(),
+        answer: faker.lorem.text()
       }
     ],
-    date: new Date()
+    date: faker.date.recent()
   }
 ])

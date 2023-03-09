@@ -16,7 +16,7 @@ const makeSut = (): JwtAdapter => {
   return new JwtAdapter(SECRET)
 }
 
-describe('JWT Adapter', () => {
+describe('JWTAdapter', () => {
   describe('sign()', () => {
     it('should call sign with correct values', async () => {
       const sut = makeSut()

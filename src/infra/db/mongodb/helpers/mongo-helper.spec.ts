@@ -1,6 +1,6 @@
 import { Collections, MongoHelper } from './mongo-helper'
 
-describe('Mongo Helper', () => {
+describe('MongoHelper', () => {
   const sut = MongoHelper.getInstance()
 
   beforeAll(async () => {
