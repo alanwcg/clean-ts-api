@@ -7,7 +7,7 @@ export const surveyAnswerSchema = {
     },
     answer: {
       type: 'string',
-      example: 'Resposta da pergunta'
+      example: 'Pleno'
     }
   },
   required: ['answer']
