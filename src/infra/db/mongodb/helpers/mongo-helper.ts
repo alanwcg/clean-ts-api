@@ -1,4 +1,4 @@
-import { MongoClient, Collection, Document, WithId } from 'mongodb'
+import { MongoClient, Collection, Document } from 'mongodb'
 
 export enum Collections {
   ACCOUNTS = 'accounts',
@@ -36,7 +36,7 @@ export class MongoHelper {
     return Object.assign({}, { id: _id.toString() }, rest) as T
   }
 
-  mapArray<T> (documents: Array<WithId<Document>>): T[] {
+  mapArray<T> (documents: Document[]): T[] {
     return documents.map(document => this.map(document))
   }
 
