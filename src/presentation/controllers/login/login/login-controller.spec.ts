@@ -72,8 +72,6 @@ describe('LoginController', () => {
   it('should return 200 if valid credentials are provided', async () => {
     const { sut, authenticationSpy } = makeSut()
     const httpResponse = await sut.handle(mockRequest())
-    expect(httpResponse).toEqual(success({
-      accessToken: authenticationSpy.result
-    }))
+    expect(httpResponse).toEqual(success(authenticationSpy.result))
   })
 })

@@ -54,8 +54,8 @@ describe('DbAuthentication', () => {
   it('should return null if LoadAccountByEmailRepository returns null', async () => {
     const { sut, loadAccountByEmailRepositorySpy } = makeSut()
     loadAccountByEmailRepositorySpy.result = null
-    const accessToken = await sut.auth(mockAuthenticationParams())
-    expect(accessToken).toBe(null)
+    const result = await sut.auth(mockAuthenticationParams())
+    expect(result).toBe(null)
   })
 
   it('should call HashComparer with correct values', async () => {
@@ -78,8 +78,8 @@ describe('DbAuthentication', () => {
   it('should return null if HashComparer returns false', async () => {
     const { sut, hashComparerSpy } = makeSut()
     hashComparerSpy.result = false
-    const accessToken = await sut.auth(mockAuthenticationParams())
-    expect(accessToken).toBe(null)
+    const result = await sut.auth(mockAuthenticationParams())
+    expect(result).toBe(null)
   })
 
   it('should call Encrypter with correct id', async () => {
@@ -95,10 +95,13 @@ describe('DbAuthentication', () => {
     await expect(promise).rejects.toThrow()
   })
 
-  it('should return accessToken if Encrypter succeeds', async () => {
-    const { sut, encrypterSpy } = makeSut()
-    const accessToken = await sut.auth(mockAuthenticationParams())
-    expect(accessToken).toBe(encrypterSpy.result)
+  it('should return AuthenticationModel on success', async () => {
+    const { sut, loadAccountByEmailRepositorySpy, encrypterSpy } = makeSut()
+    const result = await sut.auth(mockAuthenticationParams())
+    expect(result).toEqual({
+      accessToken: encrypterSpy.result,
+      name: loadAccountByEmailRepositorySpy.result.name
+    })
   })
 
   it('should call UpdateAccessTokenRepository with correct values', async () => {

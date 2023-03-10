@@ -83,7 +83,8 @@ describe('Login Routes', () => {
         .send(mockSignUpRequestBody())
         .expect(200)
         .expect(res => expect(res.body).toEqual({
-          accessToken: expect.any(String)
+          accessToken: expect.any(String),
+          name: expect.any(String)
         }))
     })
   })
@@ -140,7 +141,8 @@ describe('Login Routes', () => {
         .send(mockLoginRequestBody())
         .expect(200)
         .expect(res => expect(res.body).toEqual({
-          accessToken: expect.any(String)
+          accessToken: expect.any(String),
+          name: expect.any(String)
         }))
     })
   })
