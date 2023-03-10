@@ -3,6 +3,7 @@ import { LoadSurveyResultRepository } from '@/data/protocols/db/survey-result/lo
 import { SurveyResultModel } from '@/domain/models/survey-result'
 import { SaveSurveyResultParams } from '@/domain/usecases/survey-result/save-survey-result'
 import { mockSurveyResultModel } from '@/domain/test'
+import { LoadSurveyResultParams } from '@/domain/usecases/survey-result/load-survey-result'
 
 export class SaveSurveyResultRepositorySpy implements SaveSurveyResultRepository {
   params: SaveSurveyResultParams
@@ -13,11 +14,11 @@ export class SaveSurveyResultRepositorySpy implements SaveSurveyResultRepository
 }
 
 export class LoadSurveyResultRepositorySpy implements LoadSurveyResultRepository {
-  surveyId: string
+  params: LoadSurveyResultParams
   result: SurveyResultModel = mockSurveyResultModel()
 
-  async loadBySurveyId (surveyId: string): Promise<SurveyResultModel> {
-    this.surveyId = surveyId
+  async loadBySurveyId (params: LoadSurveyResultParams): Promise<SurveyResultModel> {
+    this.params = params
     return this.result
   }
 }

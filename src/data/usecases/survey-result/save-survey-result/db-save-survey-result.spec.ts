@@ -53,11 +53,14 @@ describe('DbSaveSurveyResult', () => {
     await expect(promise).rejects.toThrow()
   })
 
-  it('should call LoadSurveyResultRepository with correct surveyId', async () => {
+  it('should call LoadSurveyResultRepository with correct values', async () => {
     const { sut, loadSurveyResultRepositorySpy } = makeSut()
     const params = mockSaveSurveyResultParams()
     await sut.save(params)
-    expect(loadSurveyResultRepositorySpy.surveyId).toBe(params.surveyId)
+    expect(loadSurveyResultRepositorySpy.params).toEqual({
+      surveyId: params.surveyId,
+      accountId: params.accountId
+    })
   })
 
   it('should throw if LoadSurveyResultRepository throws', async () => {
