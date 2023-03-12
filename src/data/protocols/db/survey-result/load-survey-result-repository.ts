@@ -1,5 +1,5 @@
-import { SurveyResultModel } from '@/domain/models/survey-result'
-import { LoadSurveyResultParams } from '@/domain/usecases/survey-result/load-survey-result'
+import { SurveyResultModel } from '@/domain/models'
+import { LoadSurveyResultParams } from '@/domain/usecases'
 
 export interface LoadSurveyResultRepository {
   loadBySurveyId: (params: LoadSurveyResultParams) => Promise<SurveyResultModel | null>
