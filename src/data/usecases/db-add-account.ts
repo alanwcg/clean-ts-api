@@ -3,8 +3,7 @@ import {
   AddAccountRepository,
   LoadAccountByEmailRepository
 } from '@/data/protocols'
-import { AccountModel } from '@/domain/models'
-import { AddAccount, AddAccountParams } from '@/domain/usecases'
+import { AddAccount } from '@/domain/usecases'
 
 export class DbAddAccount implements AddAccount {
   constructor (
@@ -13,17 +12,19 @@ export class DbAddAccount implements AddAccount {
     private readonly addAccountRepository: AddAccountRepository
   ) {}
 
-  async add (accountData: AddAccountParams): Promise<AccountModel> {
+  async add (accountData: AddAccount.Params): Promise<AddAccount.Result> {
     const accountExists = await this.loadAccountByEmailRepository.loadByEmail(
       accountData.email
     )
     if (accountExists) {
-      return null
+      return false
     }
     const hashedPassword = await this.hasher.hash(accountData.password)
-    const account = await this.addAccountRepository.add(
-      Object.assign({}, accountData, { password: hashedPassword })
+    await this.addAccountRepository.add({
+      ...accountData,
+      password: hashedPassword
+    }
     )
-    return account
+    return true
   }
 }

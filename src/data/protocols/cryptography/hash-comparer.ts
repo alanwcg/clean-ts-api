@@ -1,8 +1,10 @@
-export type CompareParams = {
-  value: string
-  hash: string
+export interface HashComparer {
+  compare: (params: HashComparer.Params) => Promise<boolean>
 }
 
-export interface HashComparer {
-  compare: (params: CompareParams) => Promise<boolean>
+export namespace HashComparer {
+  export type Params = {
+    value: string
+    hash: string
+  }
 }

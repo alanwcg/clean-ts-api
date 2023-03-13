@@ -2,7 +2,7 @@ import { Collection, Document, ObjectId, WithId } from 'mongodb'
 import { faker } from '@faker-js/faker'
 import { SurveyMongoRepository, Collections, MongoHelper } from '@/infra/db'
 import { AccountModel } from '@/domain/models'
-import { AddSurveyParams } from '@/domain/usecases'
+import { AddSurvey } from '@/domain/usecases'
 import { mockAddAccountParams, mockAddSurveyParams } from '@/tests/domain/mocks'
 
 let surveyCollection: Collection
@@ -54,7 +54,7 @@ describe('SurveyMongoRepository', () => {
       const account = await mockAccount()
       const addSurveyModels = [mockAddSurveyParams(), mockAddSurveyParams()]
       await surveyCollection.insertMany(addSurveyModels)
-      const survey = addSurveyModels[0] as WithId<AddSurveyParams>
+      const survey = addSurveyModels[0] as WithId<AddSurvey.Params>
       await surveyResultCollection.insertOne({
         surveyId: survey._id,
         accountId: new ObjectId(account.id),

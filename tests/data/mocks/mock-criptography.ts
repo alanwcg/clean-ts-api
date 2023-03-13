@@ -1,11 +1,5 @@
 import { faker } from '@faker-js/faker'
-import {
-  Hasher,
-  Decrypter,
-  Encrypter,
-  HashComparer,
-  CompareParams
-} from '@/data/protocols'
+import { Hasher, Decrypter, Encrypter, HashComparer } from '@/data/protocols'
 
 export class HasherSpy implements Hasher {
   value: string
@@ -38,10 +32,10 @@ export class EncrypterSpy implements Encrypter {
 }
 
 export class HashComparerSpy implements HashComparer {
-  params: CompareParams
+  params: HashComparer.Params
   result: boolean = true
 
-  async compare (params: CompareParams): Promise<boolean> {
+  async compare (params: HashComparer.Params): Promise<boolean> {
     this.params = params
     return this.result
   }

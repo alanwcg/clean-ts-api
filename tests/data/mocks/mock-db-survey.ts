@@ -3,23 +3,21 @@ import {
   LoadSurveyByIdRepository,
   LoadSurveysRepository
 } from '@/data/protocols'
-import { SurveyModel } from '@/domain/models'
-import { AddSurveyParams } from '@/domain/usecases'
 import { mockSurveyModel, mockSurveyModels } from '@/tests/domain/mocks'
 
 export class AddSurveyRepositorySpy implements AddSurveyRepository {
-  params: AddSurveyParams
+  params: AddSurveyRepository.Params
 
-  async add (params: AddSurveyParams): Promise<void> {
+  async add (params: AddSurveyRepository.Params): Promise<void> {
     this.params = params
   }
 }
 
 export class LoadSurveyByIdRepositorySpy implements LoadSurveyByIdRepository {
   id: string
-  result: SurveyModel = mockSurveyModel()
+  result: LoadSurveyByIdRepository.Result = mockSurveyModel()
 
-  async loadById (id: string): Promise<SurveyModel> {
+  async loadById (id: string): Promise<LoadSurveyByIdRepository.Result> {
     this.id = id
     return this.result
   }
@@ -27,9 +25,9 @@ export class LoadSurveyByIdRepositorySpy implements LoadSurveyByIdRepository {
 
 export class LoadSurveysRepositorySpy implements LoadSurveysRepository {
   accountId: string
-  result: SurveyModel[] = mockSurveyModels()
+  result: LoadSurveysRepository.Result = mockSurveyModels()
 
-  async loadAll (accountId: string): Promise<SurveyModel[]> {
+  async loadAll (accountId: string): Promise<LoadSurveysRepository.Result> {
     this.accountId = accountId
     return this.result
   }

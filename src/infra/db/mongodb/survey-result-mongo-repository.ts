@@ -10,26 +10,22 @@ import {
   LoadSurveyResultRepository
 } from '@/data/protocols'
 import { SurveyResultModel } from '@/domain/models'
-import {
-  SaveSurveyResultParams,
-  LoadSurveyResultParams
-} from '@/domain/usecases'
 
 export class SurveyResultMongoRepository implements
   SaveSurveyResultRepository,
   LoadSurveyResultRepository {
-  async save (data: SaveSurveyResultParams): Promise<void> {
+  async save (params: SaveSurveyResultRepository.Params): Promise<void> {
     const mongoHelper = MongoHelper.getInstance()
     const surveyResultCollection = await mongoHelper.getCollection(
       Collections.SURVEY_RESULTS
     )
     await surveyResultCollection.findOneAndUpdate({
-      surveyId: new ObjectId(data.surveyId),
-      accountId: new ObjectId(data.accountId)
+      surveyId: new ObjectId(params.surveyId),
+      accountId: new ObjectId(params.accountId)
     }, {
       $set: {
-        answer: data.answer,
-        date: data.date
+        answer: params.answer,
+        date: params.date
       }
     }, {
       upsert: true
@@ -39,7 +35,7 @@ export class SurveyResultMongoRepository implements
   async loadBySurveyId ({
     surveyId,
     accountId
-  }: LoadSurveyResultParams): Promise<SurveyResultModel | null> {
+  }: LoadSurveyResultRepository.Params): Promise<LoadSurveyResultRepository.Result> {
     const mongoHelper = MongoHelper.getInstance()
     const surveyResultCollection = await mongoHelper.getCollection(
       Collections.SURVEY_RESULTS

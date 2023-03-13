@@ -1,8 +1,12 @@
-export type UpdateParams = {
-  id: string
-  accessToken: string
+export interface UpdateAccessTokenRepository {
+  updateAccessToken: (
+    params: UpdateAccessTokenRepository.Params
+  ) => Promise<void>
 }
 
-export interface UpdateAccessTokenRepository {
-  updateAccessToken: (params: UpdateParams) => Promise<void>
+export namespace UpdateAccessTokenRepository {
+  export type Params = {
+    id: string
+    accessToken: string
+  }
 }

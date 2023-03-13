@@ -2,19 +2,17 @@ import {
   AddAccountRepository,
   LoadAccountByEmailRepository,
   LoadAccountByTokenRepository,
-  LoadByTokenParams,
-  UpdateAccessTokenRepository,
-  UpdateParams
+  UpdateAccessTokenRepository
 } from '@/data/protocols'
-import { AccountModel } from '@/domain/models'
-import { AddAccountParams } from '@/domain/usecases'
 import { mockAccountModel } from '@/tests/domain/mocks'
 
 export class AddAccountRepositorySpy implements AddAccountRepository {
-  params: AddAccountParams
-  result: AccountModel = mockAccountModel()
+  params: AddAccountRepository.Params
+  result: AddAccountRepository.Result = mockAccountModel()
 
-  async add (params: AddAccountParams): Promise<AccountModel> {
+  async add (
+    params: AddAccountRepository.Params
+  ): Promise<AddAccountRepository.Result> {
     this.params = params
     return this.result
   }
@@ -22,28 +20,34 @@ export class AddAccountRepositorySpy implements AddAccountRepository {
 
 export class LoadAccountByEmailRepositorySpy implements LoadAccountByEmailRepository {
   email: string
-  result: AccountModel = mockAccountModel()
+  result: LoadAccountByEmailRepository.Result = mockAccountModel()
 
-  async loadByEmail (email: string): Promise<AccountModel> {
+  async loadByEmail (
+    email: string
+  ): Promise<LoadAccountByEmailRepository.Result> {
     this.email = email
     return this.result
   }
 }
 
 export class LoadAccountByTokenRepositorySpy implements LoadAccountByTokenRepository {
-  params: LoadByTokenParams
-  result: AccountModel = mockAccountModel()
+  params: LoadAccountByTokenRepository.Params
+  result: LoadAccountByTokenRepository.Result = mockAccountModel()
 
-  async loadByToken (params: LoadByTokenParams): Promise<AccountModel | null> {
+  async loadByToken (
+    params: LoadAccountByTokenRepository.Params
+  ): Promise<LoadAccountByTokenRepository.Result> {
     this.params = params
     return this.result
   }
 }
 
 export class UpdateAccessTokenRepositorySpy implements UpdateAccessTokenRepository {
-  params: UpdateParams
+  params: UpdateAccessTokenRepository.Params
 
-  async updateAccessToken (params: UpdateParams): Promise<void> {
+  async updateAccessToken (
+    params: UpdateAccessTokenRepository.Params
+  ): Promise<void> {
     this.params = params
   }
 }

@@ -5,10 +5,10 @@ import app from '@/main/config/app'
 import env from '@/main/config/env'
 import { MongoHelper, Collections } from '@/infra/db'
 import { DbAddSurvey, DbLoadSurveys } from '@/data/usecases'
-import { AddSurveyParams } from '@/domain/usecases'
+import { AddSurvey } from '@/domain/usecases'
 import { throwError } from '@/tests/domain/mocks'
 
-const mockAddSurveyParams = (): Omit<AddSurveyParams, 'date'> => ({
+const mockAddSurveyParams = (): Omit<AddSurvey.Params, 'date'> => ({
   question: 'Question',
   answers: [
     {

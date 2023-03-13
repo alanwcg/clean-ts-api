@@ -1,6 +1,5 @@
 import { faker } from '@faker-js/faker'
 import { SignUpController } from '@/presentation/controllers'
-import { HttpRequest } from '@/presentation/protocols'
 import { EmailInUseError, MissingParamError } from '@/presentation/errors'
 import {
   badRequest,
@@ -12,15 +11,13 @@ import { AddAccountSpy, AuthenticationSpy } from '@/tests/presentation/mocks'
 import { ValidatorSpy } from '@/tests/validation/mocks'
 import { throwError } from '@/tests/domain/mocks'
 
-const mockRequest = (): HttpRequest => {
+const mockRequest = (): SignUpController.Request => {
   const password = faker.internet.password()
   return {
-    body: {
-      name: faker.name.fullName(),
-      email: faker.internet.email(),
-      password,
-      passwordConfirmation: password
-    }
+    name: faker.name.fullName(),
+    email: faker.internet.email(),
+    password,
+    passwordConfirmation: password
   }
 }
 
@@ -47,18 +44,18 @@ const makeSut = (): SutTypes => {
 describe('SignUpController', () => {
   it('should call AddAccount with correct values', async () => {
     const { sut, addAccountSpy } = makeSut()
-    const httpRequest = mockRequest()
-    await sut.handle(httpRequest)
+    const request = mockRequest()
+    await sut.handle(request)
     expect(addAccountSpy.params).toEqual({
-      name: httpRequest.body.name,
-      email: httpRequest.body.email,
-      password: httpRequest.body.password
+      name: request.name,
+      email: request.email,
+      password: request.password
     })
   })
 
-  it('should return 403 if AddAccount returns null', async () => {
+  it('should return 403 if AddAccount returns false', async () => {
     const { sut, addAccountSpy } = makeSut()
-    addAccountSpy.result = null
+    addAccountSpy.result = false
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(forbidden(new EmailInUseError()))
   })
@@ -80,9 +77,9 @@ describe('SignUpController', () => {
 
   it('should call Validator with correct value', async () => {
     const { sut, validatorSpy } = makeSut()
-    const httpRequest = mockRequest()
-    await sut.handle(httpRequest)
-    expect(validatorSpy.input).toEqual(httpRequest.body)
+    const request = mockRequest()
+    await sut.handle(request)
+    expect(validatorSpy.input).toEqual(request)
   })
 
   it('should return 400 if Validator returns an error', async () => {
@@ -94,11 +91,11 @@ describe('SignUpController', () => {
 
   it('should call Authentication with correct values', async () => {
     const { sut, authenticationSpy } = makeSut()
-    const httpRequest = mockRequest()
-    await sut.handle(httpRequest)
+    const request = mockRequest()
+    await sut.handle(request)
     expect(authenticationSpy.params).toEqual({
-      email: httpRequest.body.email,
-      password: httpRequest.body.password
+      email: request.email,
+      password: request.password
     })
   })
 

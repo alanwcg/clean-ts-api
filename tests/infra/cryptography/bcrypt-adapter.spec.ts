@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt'
 import { BcryptAdapter } from '@/infra/cryptography'
-import { CompareParams } from '@/data/protocols'
+import { HashComparer } from '@/data/protocols'
 import { throwError } from '@/tests/domain/mocks'
 
 jest.mock('bcrypt', () => ({
@@ -12,7 +12,7 @@ jest.mock('bcrypt', () => ({
   }
 }))
 
-const mockCompareParams = (): CompareParams => ({
+const mockCompareParams = (): HashComparer.Params => ({
   value: 'any_value',
   hash: 'any_hash'
 })

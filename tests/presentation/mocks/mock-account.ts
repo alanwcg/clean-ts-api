@@ -1,43 +1,41 @@
 import { faker } from '@faker-js/faker'
-import { AccountModel, AuthenticationModel } from '@/domain/models'
 import {
   AddAccount,
-  AddAccountParams,
   Authentication,
-  AuthenticationParams,
-  LoadAccountByToken,
-  LoadAccountByTokenParams
+  LoadAccountByToken
 } from '@/domain/usecases'
 import { mockAccountModel } from '@/tests/domain/mocks'
 
 export class AuthenticationSpy implements Authentication {
-  params: AuthenticationParams
-  result: AuthenticationModel = {
+  params: Authentication.Params
+  result: Authentication.Result = {
     accessToken: faker.datatype.uuid(),
     name: faker.name.fullName()
   }
 
-  async auth (params: AuthenticationParams): Promise<AuthenticationModel> {
+  async auth (params: Authentication.Params): Promise<Authentication.Result> {
     this.params = params
     return this.result
   }
 }
 
 export class AddAccountSpy implements AddAccount {
-  params: AddAccountParams
-  result: AccountModel = mockAccountModel()
+  params: AddAccount.Params
+  result: AddAccount.Result = true
 
-  async add (params: AddAccountParams): Promise<AccountModel | null> {
+  async add (params: AddAccount.Params): Promise<AddAccount.Result> {
     this.params = params
     return this.result
   }
 }
 
 export class LoadAccountByTokenSpy implements LoadAccountByToken {
-  params: LoadAccountByTokenParams
-  result: AccountModel = mockAccountModel()
+  params: LoadAccountByToken.Params
+  result: LoadAccountByToken.Result = mockAccountModel()
 
-  async load (params: LoadAccountByTokenParams): Promise<AccountModel | null> {
+  async load (
+    params: LoadAccountByToken.Params
+  ): Promise<LoadAccountByToken.Result> {
     this.params = params
     return this.result
   }

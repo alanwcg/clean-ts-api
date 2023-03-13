@@ -1,7 +1,6 @@
 import MockDate from 'mockdate'
 import { faker } from '@faker-js/faker'
 import { LoadSurveyResultController } from '@/presentation/controllers'
-import { HttpRequest } from '@/presentation/protocols'
 import { forbidden, serverError, success } from '@/presentation/helpers'
 import { InvalidParamError } from '@/presentation/errors'
 import {
@@ -10,11 +9,9 @@ import {
 } from '@/tests/presentation/mocks'
 import { throwError } from '@/tests/domain/mocks'
 
-const mockRequest = (): HttpRequest => ({
+const mockRequest = (): LoadSurveyResultController.Request => ({
   accountId: faker.datatype.uuid(),
-  params: {
-    surveyId: faker.datatype.uuid()
-  }
+  surveyId: faker.datatype.uuid()
 })
 
 type SutTypes = {
@@ -48,9 +45,9 @@ describe('LoadSurveyResultController', () => {
 
   it('should call LoadSurveyById with correct id', async () => {
     const { sut, loadSurveyByIdSpy } = makeSut()
-    const httpRequest = mockRequest()
-    await sut.handle(httpRequest)
-    expect(loadSurveyByIdSpy.id).toBe(httpRequest.params.surveyId)
+    const request = mockRequest()
+    await sut.handle(request)
+    expect(loadSurveyByIdSpy.id).toBe(request.surveyId)
   })
 
   it('should return 403 if LoadSurveyById returns null', async () => {
@@ -71,11 +68,11 @@ describe('LoadSurveyResultController', () => {
 
   it('should call LoadSurveyResult with correct values', async () => {
     const { sut, loadSurveyResultSpy } = makeSut()
-    const httpRequest = mockRequest()
-    await sut.handle(httpRequest)
+    const request = mockRequest()
+    await sut.handle(request)
     expect(loadSurveyResultSpy.params).toEqual({
-      surveyId: httpRequest.params.surveyId,
-      accountId: httpRequest.accountId
+      surveyId: request.surveyId,
+      accountId: request.accountId
     })
   })
 
@@ -90,7 +87,7 @@ describe('LoadSurveyResultController', () => {
 
   it('should return 200 on success', async () => {
     const { sut, loadSurveyResultSpy } = makeSut()
-    const httpRequest = await sut.handle(mockRequest())
-    expect(httpRequest).toEqual(success(loadSurveyResultSpy.result))
+    const request = await sut.handle(mockRequest())
+    expect(request).toEqual(success(loadSurveyResultSpy.result))
   })
 })
