@@ -2,7 +2,6 @@ import { faker } from '@faker-js/faker'
 import { LogControllerDecorator } from '@/main/decorators'
 import { serverError, success } from '@/presentation/helpers'
 import { Controller, HttpResponse } from '@/presentation/protocols'
-import { mockAccountModel } from '@/tests/domain/mocks'
 import { LogErrorRepositorySpy } from '@/tests/data/mocks'
 
 const mockRequest = (): Record<string, any> => ({})
@@ -14,7 +13,7 @@ const mockServerError = (): HttpResponse => {
 }
 
 class ControllerSpy implements Controller {
-  httpResponse = success(mockAccountModel())
+  httpResponse = success({})
   request: Record<string, any>
 
   async handle (request: Record<string, any>): Promise<HttpResponse> {

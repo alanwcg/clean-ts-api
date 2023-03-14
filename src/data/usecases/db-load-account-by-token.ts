@@ -19,7 +19,7 @@ export class DbLoadAccountByToken implements LoadAccountByToken {
     }
     if (token) {
       const account = await this.loadAccountByTokenRepository.loadByToken({
-        token: accessToken,
+        accessToken,
         role
       })
       if (account) {

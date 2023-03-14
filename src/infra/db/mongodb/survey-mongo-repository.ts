@@ -5,7 +5,6 @@ import {
   LoadSurveysRepository,
   LoadSurveyByIdRepository
 } from '@/data/protocols'
-import { SurveyModel } from '@/domain/models'
 
 export class SurveyMongoRepository implements
   AddSurveyRepository,
@@ -61,9 +60,8 @@ export class SurveyMongoRepository implements
     const surveyCollection = await mongoHelper.getCollection(
       Collections.SURVEYS
     )
-    const survey = await surveyCollection.findOne<SurveyModel>({
-      _id: new ObjectId(id)
-    })
+    const survey = await surveyCollection
+      .findOne<LoadSurveyByIdRepository.Result>({ _id: new ObjectId(id) })
     return survey && mongoHelper.map(survey)
   }
 }

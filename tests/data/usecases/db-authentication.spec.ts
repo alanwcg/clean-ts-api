@@ -95,7 +95,7 @@ describe('DbAuthentication', () => {
     await expect(promise).rejects.toThrow()
   })
 
-  it('should return AuthenticationModel on success', async () => {
+  it('should return data on success', async () => {
     const { sut, loadAccountByEmailRepositorySpy, encrypterSpy } = makeSut()
     const result = await sut.auth(mockAuthenticationParams())
     expect(result).toEqual({

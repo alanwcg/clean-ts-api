@@ -1,5 +1,3 @@
-import { AccountModel } from '@/domain/models'
-
 export interface LoadAccountByToken {
   load: (
     params: LoadAccountByToken.Params
@@ -12,5 +10,5 @@ export namespace LoadAccountByToken {
     role?: string
   }
 
-  export type Result = AccountModel | null
+  export type Result = { id: string } | null
 }

@@ -1,4 +1,4 @@
-import { AccountModel } from '@/domain/models'
+import { LoadAccountByToken } from '@/domain/usecases'
 
 export interface LoadAccountByTokenRepository {
   loadByToken: (
@@ -7,10 +7,6 @@ export interface LoadAccountByTokenRepository {
 }
 
 export namespace LoadAccountByTokenRepository {
-  export type Params = {
-    token: string
-    role?: string
-  }
-
-  export type Result = AccountModel | null
+  export type Params = LoadAccountByToken.Params
+  export type Result = LoadAccountByToken.Result
 }

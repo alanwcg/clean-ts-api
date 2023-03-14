@@ -49,7 +49,7 @@ describe('DbLoadAccountByToken', () => {
     const { sut, loadAccountByTokenRepositorySpy } = makeSut()
     await sut.load({ accessToken, role })
     expect(loadAccountByTokenRepositorySpy.params).toEqual({
-      token: accessToken,
+      accessToken,
       role
     })
   })

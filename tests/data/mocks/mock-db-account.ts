@@ -1,14 +1,15 @@
+import { faker } from '@faker-js/faker'
 import {
   AddAccountRepository,
   LoadAccountByEmailRepository,
+  CheckAccountByEmailRepository,
   LoadAccountByTokenRepository,
   UpdateAccessTokenRepository
 } from '@/data/protocols'
-import { mockAccountModel } from '@/tests/domain/mocks'
 
 export class AddAccountRepositorySpy implements AddAccountRepository {
   params: AddAccountRepository.Params
-  result: AddAccountRepository.Result = mockAccountModel()
+  result: AddAccountRepository.Result = true
 
   async add (
     params: AddAccountRepository.Params
@@ -20,7 +21,11 @@ export class AddAccountRepositorySpy implements AddAccountRepository {
 
 export class LoadAccountByEmailRepositorySpy implements LoadAccountByEmailRepository {
   email: string
-  result: LoadAccountByEmailRepository.Result = mockAccountModel()
+  result: LoadAccountByEmailRepository.Result = {
+    id: faker.datatype.uuid(),
+    name: faker.name.fullName(),
+    password: faker.internet.password()
+  }
 
   async loadByEmail (
     email: string
@@ -30,9 +35,21 @@ export class LoadAccountByEmailRepositorySpy implements LoadAccountByEmailReposi
   }
 }
 
+export class CheckAccountByEmailRepositorySpy implements CheckAccountByEmailRepository {
+  email: string
+  result: CheckAccountByEmailRepository.Result = false
+
+  async checkByEmail (
+    email: string
+  ): Promise<CheckAccountByEmailRepository.Result> {
+    this.email = email
+    return this.result
+  }
+}
+
 export class LoadAccountByTokenRepositorySpy implements LoadAccountByTokenRepository {
   params: LoadAccountByTokenRepository.Params
-  result: LoadAccountByTokenRepository.Result = mockAccountModel()
+  result: LoadAccountByTokenRepository.Result = { id: faker.datatype.uuid() }
 
   async loadByToken (
     params: LoadAccountByTokenRepository.Params
