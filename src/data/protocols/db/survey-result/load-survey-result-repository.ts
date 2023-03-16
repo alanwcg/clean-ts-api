@@ -1,4 +1,3 @@
-import { SurveyResultModel } from '@/domain/models'
 import { LoadSurveyResult } from '@/domain/usecases'
 
 export interface LoadSurveyResultRepository {
@@ -9,5 +8,5 @@ export interface LoadSurveyResultRepository {
 
 export namespace LoadSurveyResultRepository {
   export type Params = LoadSurveyResult.Params
-  export type Result = SurveyResultModel | null
+  export type Result = LoadSurveyResult.Result
 }

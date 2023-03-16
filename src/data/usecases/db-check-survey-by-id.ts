@@ -7,6 +7,6 @@ export class DbCheckSurveyById implements CheckSurveyById {
   ) {}
 
   async checkById (id: string): Promise<CheckSurveyById.Result> {
-    return await this.checkSurveyByIdRepository.checkById(id)
+    return this.checkSurveyByIdRepository.checkById(id)
   }
 }

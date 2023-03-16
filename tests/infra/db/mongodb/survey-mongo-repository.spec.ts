@@ -122,4 +122,29 @@ describe('SurveyMongoRepository', () => {
       expect(surveyExists).toBe(false)
     })
   })
+
+  describe('loadAnswers()', () => {
+    it('should load answers on success', async () => {
+      const survey = mockAddSurveyParams() as Document
+      await surveyCollection.insertOne(survey)
+      const sut = makeSut()
+      const answers = await sut.loadAnswers(survey._id.toString())
+      expect(answers).toEqual([
+        survey.answers[0].answer,
+        survey.answers[1].answer
+      ])
+    })
+
+    it('should return empty array if id is not a valid MongoDb ObjectId', async () => {
+      const sut = makeSut()
+      const answers = await sut.loadAnswers(faker.datatype.uuid())
+      expect(answers).toEqual([])
+    })
+
+    it('should return empty array survey does not exists', async () => {
+      const sut = makeSut()
+      const answers = await sut.loadAnswers(new ObjectId().toString())
+      expect(answers).toEqual([])
+    })
+  })
 })

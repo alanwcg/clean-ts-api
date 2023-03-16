@@ -14,11 +14,16 @@ export class AccountMongoRepository implements
   CheckAccountByEmailRepository,
   UpdateAccessTokenRepository,
   LoadAccountByTokenRepository {
+  private readonly mongoHelper: MongoHelper
+
+  constructor () {
+    this.mongoHelper = MongoHelper.getInstance()
+  }
+
   async add (
     params: AddAccountRepository.Params
   ): Promise<AddAccountRepository.Result> {
-    const mongoHelper = MongoHelper.getInstance()
-    const accountCollection = await mongoHelper.getCollection(
+    const accountCollection = await this.mongoHelper.getCollection(
       Collections.ACCOUNTS
     )
     const result = await accountCollection.insertOne(params)
@@ -28,8 +33,7 @@ export class AccountMongoRepository implements
   async loadByEmail (
     email: string
   ): Promise<LoadAccountByEmailRepository.Result> {
-    const mongoHelper = MongoHelper.getInstance()
-    const accountCollection = await mongoHelper.getCollection(
+    const accountCollection = await this.mongoHelper.getCollection(
       Collections.ACCOUNTS
     )
     const account = await accountCollection.findOne<LoadAccountByEmailRepository.Result>(
@@ -42,14 +46,13 @@ export class AccountMongoRepository implements
         }
       }
     )
-    return account && mongoHelper.map(account)
+    return account && this.mongoHelper.map(account)
   }
 
   async checkByEmail (
     email: string
   ): Promise<CheckAccountByEmailRepository.Result> {
-    const mongoHelper = MongoHelper.getInstance()
-    const accountCollection = await mongoHelper.getCollection(
+    const accountCollection = await this.mongoHelper.getCollection(
       Collections.ACCOUNTS
     )
     const account = await accountCollection.findOne(
@@ -67,8 +70,7 @@ export class AccountMongoRepository implements
     id,
     accessToken
   }: UpdateAccessTokenRepository.Params): Promise<void> {
-    const mongoHelper = MongoHelper.getInstance()
-    const accountCollection = await mongoHelper.getCollection(
+    const accountCollection = await this.mongoHelper.getCollection(
       Collections.ACCOUNTS
     )
     await accountCollection.updateOne(
@@ -81,8 +83,7 @@ export class AccountMongoRepository implements
     accessToken,
     role
   }: LoadAccountByTokenRepository.Params): Promise<LoadAccountByTokenRepository.Result> {
-    const mongoHelper = MongoHelper.getInstance()
-    const accountCollection = await mongoHelper.getCollection(
+    const accountCollection = await this.mongoHelper.getCollection(
       Collections.ACCOUNTS
     )
     const account = await accountCollection.findOne<LoadAccountByTokenRepository.Result>({
@@ -100,6 +101,6 @@ export class AccountMongoRepository implements
         _id: 1
       }
     })
-    return account && mongoHelper.map(account)
+    return account && this.mongoHelper.map(account)
   }
 }

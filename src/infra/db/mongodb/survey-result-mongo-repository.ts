@@ -9,14 +9,18 @@ import {
   SaveSurveyResultRepository,
   LoadSurveyResultRepository
 } from '@/data/protocols'
-import { SurveyResultModel } from '@/domain/models'
 
 export class SurveyResultMongoRepository implements
   SaveSurveyResultRepository,
   LoadSurveyResultRepository {
+  private readonly mongoHelper: MongoHelper
+
+  constructor () {
+    this.mongoHelper = MongoHelper.getInstance()
+  }
+
   async save (params: SaveSurveyResultRepository.Params): Promise<void> {
-    const mongoHelper = MongoHelper.getInstance()
-    const surveyResultCollection = await mongoHelper.getCollection(
+    const surveyResultCollection = await this.mongoHelper.getCollection(
       Collections.SURVEY_RESULTS
     )
     await surveyResultCollection.findOneAndUpdate({
@@ -36,8 +40,7 @@ export class SurveyResultMongoRepository implements
     surveyId,
     accountId
   }: LoadSurveyResultRepository.Params): Promise<LoadSurveyResultRepository.Result> {
-    const mongoHelper = MongoHelper.getInstance()
-    const surveyResultCollection = await mongoHelper.getCollection(
+    const surveyResultCollection = await this.mongoHelper.getCollection(
       Collections.SURVEY_RESULTS
     )
     const query = new QueryBuilder()
@@ -218,7 +221,7 @@ export class SurveyResultMongoRepository implements
       .build()
     const surveyResult = await surveyResultCollection.aggregate(query).toArray()
     return surveyResult?.length
-      ? JSON.parse(JSON.stringify(surveyResult[0])) as SurveyResultModel
+      ? JSON.parse(JSON.stringify(surveyResult[0])) as LoadSurveyResultRepository.Result
       : null
   }
 }
