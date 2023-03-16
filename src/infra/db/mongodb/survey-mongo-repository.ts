@@ -3,13 +3,15 @@ import { MongoHelper, QueryBuilder, Collections } from '@/infra/db'
 import {
   AddSurveyRepository,
   LoadSurveysRepository,
-  LoadSurveyByIdRepository
+  LoadSurveyByIdRepository,
+  CheckSurveyByIdRepository
 } from '@/data/protocols'
 
 export class SurveyMongoRepository implements
   AddSurveyRepository,
   LoadSurveysRepository,
-  LoadSurveyByIdRepository {
+  LoadSurveyByIdRepository,
+  CheckSurveyByIdRepository {
   async add (params: AddSurveyRepository.Params): Promise<void> {
     const mongoHelper = MongoHelper.getInstance()
     const surveyCollection = await mongoHelper.getCollection(
@@ -63,5 +65,21 @@ export class SurveyMongoRepository implements
     const survey = await surveyCollection
       .findOne<LoadSurveyByIdRepository.Result>({ _id: new ObjectId(id) })
     return survey && mongoHelper.map(survey)
+  }
+
+  async checkById (id: string): Promise<CheckSurveyByIdRepository.Result> {
+    if (!ObjectId.isValid(id)) return false
+    const mongoHelper = MongoHelper.getInstance()
+    const surveyCollection = await mongoHelper.getCollection(
+      Collections.SURVEYS
+    )
+    const survey = await surveyCollection.findOne<LoadSurveyByIdRepository.Result>({
+      _id: new ObjectId(id)
+    }, {
+      projection: {
+        _id: 1
+      }
+    })
+    return !!survey
   }
 }

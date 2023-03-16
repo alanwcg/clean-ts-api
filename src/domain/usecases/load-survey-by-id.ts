@@ -5,5 +5,5 @@ export interface LoadSurveyById {
 }
 
 export namespace LoadSurveyById {
-  export type Result = SurveyModel
+  export type Result = SurveyModel | null
 }

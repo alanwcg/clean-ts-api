@@ -100,4 +100,26 @@ describe('SurveyMongoRepository', () => {
       expect(survey).toBeFalsy()
     })
   })
+
+  describe('checkById()', () => {
+    it('should return true if survey exists', async () => {
+      const surveyData = mockAddSurveyParams() as Document
+      await surveyCollection.insertOne(surveyData)
+      const sut = makeSut()
+      const surveyExists = await sut.checkById(surveyData._id.toString())
+      expect(surveyExists).toBe(true)
+    })
+
+    it('should return false if id is not a valid MongoDb ObjectId', async () => {
+      const sut = makeSut()
+      const surveyExists = await sut.checkById(faker.datatype.uuid())
+      expect(surveyExists).toBe(false)
+    })
+
+    it('should return false on fail', async () => {
+      const sut = makeSut()
+      const surveyExists = await sut.checkById(new ObjectId().toString())
+      expect(surveyExists).toBe(false)
+    })
+  })
 })
