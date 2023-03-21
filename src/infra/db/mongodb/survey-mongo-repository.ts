@@ -1,11 +1,11 @@
 import { ObjectId } from 'mongodb'
 import { MongoHelper, QueryBuilder, Collections } from '@/infra/db'
 import {
-  AddSurveyRepository,
-  LoadSurveysRepository,
-  LoadSurveyByIdRepository,
-  CheckSurveyByIdRepository,
-  LoadAnswersBySurveyRepository
+  type AddSurveyRepository,
+  type LoadSurveysRepository,
+  type LoadSurveyByIdRepository,
+  type CheckSurveyByIdRepository,
+  type LoadAnswersBySurveyRepository
 } from '@/data/protocols'
 
 export class SurveyMongoRepository implements
@@ -58,7 +58,8 @@ export class SurveyMongoRepository implements
         }
       })
       .build()
-    const surveys = await surveyCollection.aggregate(query).toArray()
+    const surveys = await surveyCollection
+      .aggregate<LoadSurveysRepository.Result>(query).toArray()
     return this.mongoHelper.mapArray(surveys)
   }
 

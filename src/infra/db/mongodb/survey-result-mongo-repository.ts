@@ -6,8 +6,8 @@ import {
   QueryBuilder
 } from '@/infra/db'
 import {
-  SaveSurveyResultRepository,
-  LoadSurveyResultRepository
+  type SaveSurveyResultRepository,
+  type LoadSurveyResultRepository
 } from '@/data/protocols'
 
 export class SurveyResultMongoRepository implements
@@ -219,9 +219,10 @@ export class SurveyResultMongoRepository implements
         answers: '$answers'
       })
       .build()
-    const surveyResult = await surveyResultCollection.aggregate(query).toArray()
+    const surveyResult = await surveyResultCollection
+      .aggregate<LoadSurveyResultRepository.Result>(query).toArray()
     return surveyResult?.length
-      ? JSON.parse(JSON.stringify(surveyResult[0])) as LoadSurveyResultRepository.Result
+      ? JSON.parse(JSON.stringify(surveyResult[0]))
       : null
   }
 }
