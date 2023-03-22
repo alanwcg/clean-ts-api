@@ -11,5 +11,5 @@ export default (app: Express): void => {
   })
   server.start()
     .then(() => app.use(expressMiddleware(server)))
-    .catch(err => console.log(err))
+    .catch(err => { console.log(err) })
 }
